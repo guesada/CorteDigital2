@@ -195,8 +195,8 @@ def list_appointments_for_user() -> List[Dict[str, Any]]:
         return []
     
     if usuario["tipo"] == "barbeiro":
-        # Barbeiro vê TODOS os agendamentos da barbearia (não apenas os dele)
-        return [a.to_dict() for a in Appointment.query.order_by(Appointment.date.desc(), Appointment.time.desc()).all()]
+        # Barbeiro vê apenas seus próprios agendamentos
+        return [a.to_dict() for a in Appointment.query.filter_by(barbeiro=usuario["name"]).order_by(Appointment.date.desc(), Appointment.time.desc()).all()]
     
     # Cliente vê apenas seus próprios agendamentos
     return [a.to_dict() for a in Appointment.query.filter_by(cliente_email=usuario["email"]).all()]
