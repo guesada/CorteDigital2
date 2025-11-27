@@ -51,6 +51,15 @@ async function fazerLogin(e, destino) {
 async function fazerCadastro(e, tipo) {
   e.preventDefault();
   const form = e.target;
+  
+  // Validar formulário antes de enviar
+  if (typeof validarFormularioRegistro === 'function') {
+    if (!validarFormularioRegistro(form)) {
+      console.log('❌ Formulário inválido');
+      return;
+    }
+  }
+  
   const name = form.querySelector('input[name="name"]').value;
   const email = form.querySelector('input[type="email"]').value;
   const password = form.querySelector('input[type="password"]').value;

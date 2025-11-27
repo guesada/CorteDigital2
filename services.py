@@ -98,7 +98,7 @@ def authenticate_user(email: str, password: str) -> Optional[Dict[str, Any]]:
     return None
 
 
-def register_user(nome: str, email: str, senha: str, tipo: str = "cliente") -> bool:
+def register_user(nome: str, email: str, senha: str, tipo: str = "cliente", telefone: str = None) -> bool:
     # Verificar se email já existe em clientes ou barbeiros
     if Cliente.query.filter_by(email=email).first() or Barber.query.filter_by(email=email).first():
         return False
@@ -109,6 +109,7 @@ def register_user(nome: str, email: str, senha: str, tipo: str = "cliente") -> b
             nome=nome,
             email=email,
             senha=senha,
+            telefone=telefone,
             foto="https://via.placeholder.com/150",
             especialidades=json.dumps(["Corte", "Barba"]),
             avaliacao=5.0,
@@ -118,7 +119,7 @@ def register_user(nome: str, email: str, senha: str, tipo: str = "cliente") -> b
         db.session.add(b)
     else:
         # Criar cliente
-        c = Cliente(nome=nome, email=email, senha=senha)
+        c = Cliente(nome=nome, email=email, senha=senha, telefone=telefone)
         db.session.add(c)
     
     db.session.commit()
