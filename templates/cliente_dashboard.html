@@ -5,21 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Cliente - Corte Digital</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/visual-improvements.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/proximos-agendamentos.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/cliente-agendamentos.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/agendamentos-lista.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/booking-form.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/tabs.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-upgrade.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/calendar-picker.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/cancel-modal.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/progressive-booking.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/cliente-upgrade.css') }}">
-    <!-- Dashboard Intuitiva deve ser carregado por último para sobrescrever estilos -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard-intuitiva.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/novo-agendamento.css') }}">
+    <!-- Shared CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/shared/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/shared/visual-improvements.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/shared/modern-upgrade.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/shared/notifications.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/shared/proximos-agendamentos.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/shared/header-navbar.css') }}">
+    <!-- Cliente CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cliente/dashboard-intuitiva.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cliente/cliente-upgrade.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cliente/novo-agendamento.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cliente/booking-form.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cliente/calendar-picker.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cliente/progressive-booking.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body class="dark-theme">
@@ -396,8 +395,17 @@
         </div>
     </div>
 
-    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/micro-interactions.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/novo-agendamento.js') }}"></script>
+    <!-- Shared JS -->
+    <script src="{{ url_for('static', filename='js/shared/api.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/shared/utils.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/shared/theme.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/shared/navigation.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/shared/auth.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/shared/notifications.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/shared/micro-interactions.js') }}"></script>
+    <!-- Cliente JS -->
+    <script src="{{ url_for('static', filename='js/cliente/novo-agendamento.js') }}"></script>
+    <!-- Main Index -->
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
 </body>
 </html>
