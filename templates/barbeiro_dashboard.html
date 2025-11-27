@@ -5,13 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Barbeiro - Corte Digital</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/visual-improvements.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/agenda-inteligente.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/proximos-agendamentos.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-upgrade.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/notifications.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/barbeiro-professional.css') }}">
+    <!-- Shared CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/shared/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/shared/visual-improvements.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/shared/modern-upgrade.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/shared/notifications.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/shared/proximos-agendamentos.css') }}">
+    <!-- Barbeiro CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/barbeiro/agenda-inteligente.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/barbeiro/barbeiro-professional.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="dark-theme">
@@ -151,11 +153,11 @@
                     <div class="agenda-highlight">
                         <div class="agenda-highlight-header">
                             <div>
-                                <h3 style="font-size: 20px; font-weight: 700; color: var(--color-text); margin-bottom: 4px;">
-                                    <i class="fas fa-calendar-alt" style="color: #3b82f6;"></i>
+                                <h3 style="font-size: 20px; font-weight: 700; color: white; margin-bottom: 4px;">
+                                    <i class="fas fa-calendar-alt"></i>
                                     Agenda Inteligente
                                 </h3>
-                                <p style="font-size: 14px; color: var(--color-text-secondary);">Seus próximos compromissos de hoje</p>
+                                <p style="font-size: 14px; color: rgba(255,255,255,0.9);">Próximos compromissos agendados</p>
                             </div>
                             <button onclick="showSection('agenda-inteligente')" class="btn-view-agenda">
                                 Ver Agenda Completa
@@ -348,14 +350,19 @@
         </div>
     </div>
 
-    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/micro-interactions.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/notifications.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/barbeiro-dashboard.js') }}"></script>
+    <!-- Shared JS -->
+    <script src="{{ url_for('static', filename='js/shared/api.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/shared/utils.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/shared/theme.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/shared/navigation.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/shared/auth.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/shared/notifications.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/shared/micro-interactions.js') }}"></script>
+    <!-- Barbeiro JS -->
+    <script src="{{ url_for('static', filename='js/barbeiro/barbeiro-dashboard.js') }}"></script>
+    <!-- Main Index -->
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
     <script>
-        // Variável para controlar se a agenda já foi inicializada
-        let agendaInicializada = false;
-        
         // Função para mostrar seções
         function showSection(sectionId) {
             document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
@@ -364,205 +371,10 @@
             document.querySelectorAll('.nav-item-modern').forEach(i => i.classList.remove('active'));
             event.target.closest('.nav-item-modern')?.classList.add('active');
             
-            // Inicializar agenda inteligente quando abrir (apenas uma vez)
+            // Inicializar agenda inteligente quando abrir
             if (sectionId === 'agenda-inteligente' && typeof initAgendaInteligente === 'function') {
-                if (!agendaInicializada) {
-                    console.log('🔄 Inicializando agenda inteligente...');
-                    initAgendaInteligente();
-                    agendaInicializada = true;
-                } else {
-                    console.log('🔄 Recarregando agenda inteligente...');
-                    loadAgendaAppointments().then(() => renderAgenda());
-                }
+                initAgendaInteligente();
             }
-        }
-
-        // ===== DASHBOARD PROFISSIONAL =====
-        async function loadProfessionalDashboard() {
-            try {
-                // Carregar agendamentos
-                const response = await fetch('/api/appointments');
-                const appointments = await response.json();
-                
-                // Calcular métricas
-                const now = new Date();
-                const today = now.toISOString().split('T')[0];
-                const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-                const fourteenDaysAgo = new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000);
-                
-                // Agendamentos de hoje
-                const todayAppointments = appointments.filter(a => a.data === today && ['agendado', 'confirmado', 'pendente'].includes(a.status));
-                const completedToday = appointments.filter(a => a.data === today && a.status === 'concluido');
-                const pendingToday = appointments.filter(a => a.data === today && ['agendado', 'confirmado', 'pendente'].includes(a.status));
-                
-                // Faturamento últimos 7 dias
-                const last7Days = appointments.filter(a => {
-                    const date = new Date(a.data);
-                    return date >= sevenDaysAgo && a.status === 'concluido';
-                });
-                const revenue7Days = last7Days.reduce((sum, a) => sum + (parseFloat(a.preco) || 0), 0);
-                
-                // Faturamento 7-14 dias atrás (para comparação)
-                const previous7Days = appointments.filter(a => {
-                    const date = new Date(a.data);
-                    return date >= fourteenDaysAgo && date < sevenDaysAgo && a.status === 'concluido';
-                });
-                const revenuePrevious = previous7Days.reduce((sum, a) => sum + (parseFloat(a.preco) || 0), 0);
-                const revenueTrend = revenuePrevious > 0 ? ((revenue7Days - revenuePrevious) / revenuePrevious * 100).toFixed(1) : 0;
-                
-                // Clientes únicos este mês
-                const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0];
-                const monthAppointments = appointments.filter(a => a.data >= firstDayOfMonth && a.status === 'concluido');
-                const uniqueClients = new Set(monthAppointments.map(a => a.cliente_id)).size;
-                
-                // Ticket médio
-                const completedAppointments = appointments.filter(a => a.status === 'concluido');
-                const totalRevenue = completedAppointments.reduce((sum, a) => sum + (parseFloat(a.preco) || 0), 0);
-                const ticketAverage = completedAppointments.length > 0 ? totalRevenue / completedAppointments.length : 0;
-                
-                // Atualizar métricas
-                document.getElementById('revenue-7days').textContent = revenue7Days.toFixed(2).replace('.', ',');
-                document.getElementById('revenue-trend').textContent = Math.abs(revenueTrend) + '%';
-                document.querySelector('.metric-trend').classList.toggle('positive', revenueTrend >= 0);
-                document.querySelector('.metric-trend').classList.toggle('negative', revenueTrend < 0);
-                document.querySelector('.metric-trend i').className = revenueTrend >= 0 ? 'fas fa-arrow-up' : 'fas fa-arrow-down';
-                
-                document.getElementById('appointments-today').textContent = todayAppointments.length;
-                document.getElementById('completed-today').textContent = completedToday.length;
-                document.getElementById('pending-today').textContent = pendingToday.length;
-                
-                document.getElementById('clients-month').textContent = uniqueClients;
-                document.getElementById('new-clients').textContent = Math.floor(uniqueClients * 0.3); // Estimativa
-                
-                document.getElementById('ticket-average').textContent = ticketAverage.toFixed(2).replace('.', ',');
-                document.getElementById('total-services').textContent = completedAppointments.length;
-                
-                // Carregar preview da agenda
-                loadAgendaPreview(todayAppointments);
-                
-                // Carregar gráfico semanal
-                loadWeeklyChart(appointments);
-                
-                // Carregar serviços mais realizados
-                loadTopServices(completedAppointments);
-                
-            } catch (error) {
-                console.error('Erro ao carregar dashboard profissional:', error);
-            }
-        }
-
-        function loadAgendaPreview(todayAppointments) {
-            const container = document.getElementById('agenda-preview');
-            
-            if (todayAppointments.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-agenda">
-                        <i class="fas fa-calendar-check"></i>
-                        <div class="empty-agenda-title">Nenhum agendamento para hoje</div>
-                        <div class="empty-agenda-text">Aproveite para organizar seu espaço!</div>
-                    </div>
-                `;
-                return;
-            }
-            
-            // Ordenar por horário e pegar os próximos 3
-            const sorted = todayAppointments.sort((a, b) => a.horario.localeCompare(b.horario));
-            const next3 = sorted.slice(0, 3);
-            
-            container.innerHTML = next3.map(apt => `
-                <div class="preview-appointment">
-                    <div class="preview-time">${apt.horario}</div>
-                    <div class="preview-info">
-                        <div class="preview-service">${apt.servico}</div>
-                        <div class="preview-client">
-                            <i class="fas fa-user"></i>
-                            ${apt.cliente_nome}
-                        </div>
-                    </div>
-                    <div class="preview-status ${apt.status}">${apt.status}</div>
-                </div>
-            `).join('');
-        }
-
-        function loadWeeklyChart(appointments) {
-            const container = document.getElementById('weekly-chart');
-            const days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
-            const today = new Date().getDay();
-            
-            // Últimos 7 dias
-            const chartData = [];
-            for (let i = 6; i >= 0; i--) {
-                const date = new Date();
-                date.setDate(date.getDate() - i);
-                const dateStr = date.toISOString().split('T')[0];
-                const dayName = days[date.getDay()];
-                const count = appointments.filter(a => a.data === dateStr && a.status === 'concluido').length;
-                const isToday = date.getDay() === today && i === 0;
-                
-                chartData.push({ day: dayName, count, isToday });
-            }
-            
-            const maxCount = Math.max(...chartData.map(d => d.count), 1);
-            
-            container.innerHTML = chartData.map(data => {
-                const height = (data.count / maxCount) * 100;
-                return `
-                    <div class="chart-bar ${data.isToday ? 'today' : ''}">
-                        <div class="chart-bar-fill" style="height: ${height}%">
-                            <div class="chart-bar-value">${data.count}</div>
-                        </div>
-                        <div class="chart-bar-label">${data.day}</div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function loadTopServices(completedAppointments) {
-            const container = document.getElementById('top-services-list');
-            
-            // Contar serviços
-            const serviceCounts = {};
-            const serviceRevenue = {};
-            
-            completedAppointments.forEach(apt => {
-                const service = apt.servico;
-                serviceCounts[service] = (serviceCounts[service] || 0) + 1;
-                serviceRevenue[service] = (serviceRevenue[service] || 0) + (parseFloat(apt.preco) || 0);
-            });
-            
-            // Ordenar por quantidade
-            const sorted = Object.entries(serviceCounts)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 5);
-            
-            if (sorted.length === 0) {
-                container.innerHTML = `
-                    <div class="loading-services">
-                        <i class="fas fa-inbox"></i>
-                        Nenhum serviço realizado ainda
-                    </div>
-                `;
-                return;
-            }
-            
-            container.innerHTML = sorted.map(([service, count], index) => `
-                <div class="service-rank-item">
-                    <div class="service-rank-number">${index + 1}</div>
-                    <div class="service-rank-info">
-                        <div class="service-rank-name">${service}</div>
-                        <div class="service-rank-stats">${count} ${count === 1 ? 'serviço' : 'serviços'} realizados</div>
-                    </div>
-                    <div>
-                        <div class="service-rank-count">${count}</div>
-                        <div class="service-rank-revenue">R$ ${serviceRevenue[service].toFixed(2).replace('.', ',')}</div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // Carregar dashboard ao iniciar
-        if (window.currentUser && window.currentUser.tipo === 'barbeiro') {
-            loadProfessionalDashboard();
         }
     </script>
 </body>
