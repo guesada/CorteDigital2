@@ -700,3 +700,138 @@
   font-size: 14px;
   color: var(--color-text-secondary);
 }
+
+/* ===== AGRUPAMENTO POR DATA ===== */
+
+.agenda-by-date {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.date-group {
+  background: var(--color-card);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+}
+
+.date-group:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+}
+
+.date-group.today {
+  border: 2px solid var(--color-primary);
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.15);
+}
+
+.date-group-header {
+  background: linear-gradient(135deg, var(--color-background) 0%, var(--color-card) 100%);
+  padding: 24px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.date-group.today .date-group-header {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%);
+}
+
+.date-group-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.date-group-title i {
+  font-size: 24px;
+  color: var(--color-primary);
+}
+
+.day-name {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-text);
+  text-transform: capitalize;
+}
+
+.today-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  background: var(--color-primary);
+  color: white;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.date-group-subtitle {
+  font-size: 15px;
+  color: var(--color-text-secondary);
+  margin-bottom: 8px;
+  text-transform: capitalize;
+}
+
+.date-group-count {
+  display: inline-block;
+  padding: 6px 14px;
+  background: var(--color-background);
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.date-group.today .date-group-count {
+  background: var(--color-primary);
+  color: white;
+}
+
+.date-group-appointments {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.date-group-appointments .appointment-card-agenda {
+  margin: 0;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+/* Animação de entrada */
+.date-group {
+  animation: fadeInUp 0.4s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .date-group-header {
+    padding: 20px;
+  }
+  
+  .day-name {
+    font-size: 20px;
+  }
+  
+  .date-group-title i {
+    font-size: 20px;
+  }
+  
+  .date-group-appointments {
+    padding: 12px;
+  }
+}
