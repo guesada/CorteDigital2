@@ -11,45 +11,66 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/shared/notifications.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/shared/proximos-agendamentos.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/shared/header-navbar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/barbeiro/header-modern.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/barbeiro/agenda-inteligente.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/barbeiro/barbeiro-professional.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="dark-theme">
     <div id="dashboard-barbeiro" class="screen active">
-        <!-- Header -->
-        <header class="header-modern">
-            <div class="header-brand">
-                <div class="header-brand-icon">
-                    <i class="fas fa-scissors"></i>
+        <!-- Header Moderno -->
+        <header class="barber-header">
+            <div class="barber-header-container">
+                <!-- Brand -->
+                <div class="barber-header-brand">
+                    <div class="brand-logo">
+                        <i class="fas fa-scissors"></i>
+                    </div>
+                    <div class="brand-text">
+                        <span class="brand-name">Corte Digital</span>
+                        <span class="brand-subtitle">Painel Profissional</span>
+                    </div>
                 </div>
-                <span>Corte Digital</span>
-            </div>
-            <div class="header-center" style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 1rem;">
-                <button class="header-nav-btn active" onclick="showSection('home-barbeiro')" title="Dashboard">
-                    <i class="fas fa-home"></i>
-                    <span>Dashboard</span>
-                </button>
-                <button class="header-nav-btn" onclick="showSection('agenda-inteligente')" title="Agenda">
-                    <i class="fas fa-calendar-alt"></i>
-                    <span>Agenda</span>
-                </button>
-                <button class="header-nav-btn" onclick="showSection('estoque-barbeiro')" title="Estoque">
-                    <i class="fas fa-box"></i>
-                    <span>Estoque</span>
-                </button>
-            </div>
-            <div class="header-actions">
-                <button class="header-btn tooltip-modern" data-tooltip="Alternar Tema" onclick="toggleTheme()">
-                    <i class="fas fa-moon" id="theme-icon"></i>
-                </button>
-                <button class="header-btn tooltip-modern" data-tooltip="Notificações" onclick="showNotifications()">
-                    <i class="fas fa-bell"></i>
-                    <span class="notification-count" style="display: none;">0</span>
-                </button>
-                <button class="header-btn tooltip-modern" data-tooltip="Sair" onclick="logout()">
-                    <i class="fas fa-sign-out-alt"></i>
-                </button>
+
+                <!-- Navigation -->
+                <nav class="barber-header-nav">
+                    <button class="nav-item active" onclick="showSection('home-barbeiro')" data-section="home-barbeiro">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </button>
+                    <button class="nav-item" onclick="showSection('agenda-inteligente')" data-section="agenda-inteligente">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Agenda</span>
+                    </button>
+                    <button class="nav-item" onclick="showSection('estoque-barbeiro')" data-section="estoque-barbeiro">
+                        <i class="fas fa-box"></i>
+                        <span>Estoque</span>
+                    </button>
+                </nav>
+
+                <!-- Actions -->
+                <div class="barber-header-actions">
+                    <button class="action-btn" onclick="toggleTheme()" title="Alternar Tema">
+                        <i class="fas fa-moon" id="theme-icon"></i>
+                    </button>
+                    <button class="action-btn notification-btn" onclick="showNotifications()" title="Notificações">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge" style="display: none;">0</span>
+                    </button>
+                    <div class="user-menu">
+                        <button class="user-menu-btn" onclick="toggleUserMenu()">
+                            <div class="user-avatar">{{ nome[0] if nome else 'B' }}</div>
+                            <span class="user-name">{{ nome }}</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="user-menu-dropdown" id="user-menu-dropdown">
+                            <a href="#" onclick="logout(); return false;" class="menu-item">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Sair</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </header>
 
@@ -59,13 +80,49 @@
                 
                 <!-- Dashboard Home -->
                 <div id="home-barbeiro" class="content-section active">
-                    <div style="margin-bottom: 2.5rem;">
-                        <h1 style="font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--color-text);">
-                            Olá, {{ nome }}! 👋
-                        </h1>
-                        <p style="font-size: 1rem; color: var(--color-text-secondary);">
-                            Bem-vindo ao seu painel profissional
-                        </p>
+                    <!-- Hero Section -->
+                    <div class="barber-hero">
+                        <div class="barber-hero-content">
+                            <div class="barber-hero-greeting">
+                                <h1>Olá, {{ nome }}! 👋</h1>
+                                <p>Bem-vindo ao seu painel profissional</p>
+                            </div>
+                            <div class="barber-hero-stats">
+                                <div class="hero-stat-item">
+                                    <div class="hero-stat-icon">
+                                        <i class="fas fa-calendar-check"></i>
+                                    </div>
+                                    <div class="hero-stat-content">
+                                        <div class="hero-stat-value" id="hero-stat-hoje">0</div>
+                                        <div class="hero-stat-label">Hoje</div>
+                                    </div>
+                                </div>
+                                <div class="hero-stat-item">
+                                    <div class="hero-stat-icon">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div class="hero-stat-content">
+                                        <div class="hero-stat-value" id="hero-stat-pendentes">0</div>
+                                        <div class="hero-stat-label">Pendentes</div>
+                                    </div>
+                                </div>
+                                <div class="hero-stat-item">
+                                    <div class="hero-stat-icon">
+                                        <i class="fas fa-dollar-sign"></i>
+                                    </div>
+                                    <div class="hero-stat-content">
+                                        <div class="hero-stat-value">R$ <span id="hero-stat-faturamento">0,00</span></div>
+                                        <div class="hero-stat-label">Últimos 7 dias</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="barber-hero-actions">
+                            <button class="hero-action-btn primary" onclick="showSection('agenda-inteligente')">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span>Ver Agenda Completa</span>
+                            </button>
+                        </div>
                     </div>
 
                     <div style="margin-bottom: 1.5rem;">
@@ -85,9 +142,8 @@
                             </div>
                             <div class="metric-value">R$ <span id="revenue-7days">0,00</span></div>
                             <div class="metric-label">Faturamento</div>
-                            <div class="metric-trend positive">
-                                <i class="fas fa-arrow-up"></i>
-                                <span id="revenue-trend">0%</span> vs semana anterior
+                            <div class="metric-detail">
+                                Últimos 7 dias
                             </div>
                         </div>
 
@@ -323,6 +379,13 @@
     <script src="{{ url_for('static', filename='js/index.js') }}"></script>
     
     <script>
+        console.log('🎯 Script inline do template carregado');
+        console.log('🔍 Verificando elementos:', {
+            dashboard: document.getElementById('dashboard-barbeiro'),
+            heroStatHoje: document.getElementById('hero-stat-hoje'),
+            revenue7days: document.getElementById('revenue-7days')
+        });
+        
         function showSection(sectionId) {
             document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
             const section = document.getElementById(sectionId);
@@ -330,16 +393,28 @@
                 section.classList.add('active');
             }
             
-            document.querySelectorAll('.header-nav-btn').forEach(btn => btn.classList.remove('active'));
-            if (event && event.target) {
-                const btn = event.target.closest('.header-nav-btn');
-                if (btn) btn.classList.add('active');
-            }
+            // Atualizar navegação
+            document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
+            const activeBtn = document.querySelector(`.nav-item[data-section="${sectionId}"]`);
+            if (activeBtn) activeBtn.classList.add('active');
             
             if (sectionId === 'agenda-inteligente' && typeof initAgendaInteligente === 'function') {
                 initAgendaInteligente();
             }
         }
+        
+        function toggleUserMenu() {
+            const menu = document.querySelector('.user-menu');
+            menu.classList.toggle('active');
+        }
+        
+        // Fechar menu ao clicar fora
+        document.addEventListener('click', (e) => {
+            const menu = document.querySelector('.user-menu');
+            if (menu && !menu.contains(e.target)) {
+                menu.classList.remove('active');
+            }
+        });
         
         async function handleProductSubmit(e) {
             e.preventDefault();
@@ -414,7 +489,7 @@
         }
         
         document.addEventListener('DOMContentLoaded', () => {
-            const firstBtn = document.querySelector('.header-nav-btn');
+            const firstBtn = document.querySelector('.nav-item');
             if (firstBtn) firstBtn.classList.add('active');
             loadProducts();
         });
