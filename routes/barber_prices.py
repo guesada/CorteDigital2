@@ -49,12 +49,14 @@ def update_barber_prices():
     
     user = usuario_atual()
     barbeiro_id = user['id']
+    barbeiro_nome = user['name']
     
     body = request.get_json() or {}
     
     # Validar dados
     servicos = ["Corte", "Corte + Barba", "Barba"]
     precos = {}
+    precos_alterados = []
     
     for servico in servicos:
         preco = body.get(servico)
@@ -69,24 +71,71 @@ def update_barber_prices():
         except (ValueError, TypeError):
             return jsonify({"success": False, "message": f"Preço de '{servico}' inválido"}), 400
     
-    # Atualizar ou criar preços
-    for servico, preco in precos.items():
+    # Atualizar ou criar preços e detectar mudanças
+    from db import Notification, Cliente, Appointment
+    from datetime import datetime
+    
+    for servico, preco_novo in precos.items():
         price_obj = BarberPrice.query.filter_by(
             barbeiro_id=barbeiro_id,
             servico_nome=servico
         ).first()
         
+        preco_antigo = None
         if price_obj:
-            price_obj.preco = preco
+            preco_antigo = price_obj.preco
+            if preco_antigo != preco_novo:
+                precos_alterados.append({
+                    'servico': servico,
+                    'preco_antigo': preco_antigo,
+                    'preco_novo': preco_novo
+                })
+            price_obj.preco = preco_novo
         else:
             price_obj = BarberPrice(
                 barbeiro_id=barbeiro_id,
                 servico_nome=servico,
-                preco=preco
+                preco=preco_novo
             )
             db.session.add(price_obj)
+            # Primeira vez definindo preço, não notificar
     
     db.session.commit()
+    
+    # Criar notificações para clientes que já agendaram com este barbeiro
+    if precos_alterados:
+        # Buscar clientes únicos que têm agendamentos com este barbeiro
+        agendamentos = Appointment.query.filter_by(barbeiro_id=barbeiro_id).all()
+        clientes_emails = set(apt.cliente_email for apt in agendamentos if apt.cliente_email)
+        
+        # Criar mensagem de notificação
+        if len(precos_alterados) == 1:
+            mudanca = precos_alterados[0]
+            if mudanca['preco_novo'] < mudanca['preco_antigo']:
+                mensagem = f"🎉 Boa notícia! O barbeiro {barbeiro_nome} reduziu o preço de {mudanca['servico']} de R$ {mudanca['preco_antigo']:.2f} para R$ {mudanca['preco_novo']:.2f}!"
+            else:
+                mensagem = f"📢 O barbeiro {barbeiro_nome} atualizou o preço de {mudanca['servico']} de R$ {mudanca['preco_antigo']:.2f} para R$ {mudanca['preco_novo']:.2f}"
+        else:
+            mensagem = f"📢 O barbeiro {barbeiro_nome} atualizou os preços de {len(precos_alterados)} serviços. Confira os novos valores!"
+        
+        # Criar notificação para cada cliente
+        for cliente_email in clientes_emails:
+            notificacao = Notification(
+                usuario_email=cliente_email,
+                tipo="preco_alterado",
+                mensagem=mensagem,
+                lida=False,
+                data=datetime.utcnow().isoformat()
+            )
+            db.session.add(notificacao)
+        
+        db.session.commit()
+        
+        return jsonify({
+            "success": True, 
+            "message": f"Preços atualizados! {len(clientes_emails)} clientes foram notificados.",
+            "clientes_notificados": len(clientes_emails)
+        })
     
     return jsonify({"success": True, "message": "Preços atualizados com sucesso"})
 
