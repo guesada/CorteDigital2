@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/shared/proximos-agendamentos.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/shared/header-navbar.css') }}">
     <!-- Cliente CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cliente/header-modern.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cliente/hero-modern.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/cliente/dashboard-nova.css') }}?v=12">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/cliente/agendamentos-tab.css') }}?v=12">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/cliente/cancel-modal.css') }}?v=12">
@@ -23,38 +25,59 @@
 </head>
 <body class="dark-theme">
 <div id="dashboard-cliente" class="screen active">
-        <!-- Header moderno -->
-        <header class="header-modern">
-            <div class="header-brand">
-                <div class="header-brand-icon">
-                    <i class="fas fa-scissors"></i>
+        <!-- Header Moderno -->
+        <header class="cliente-header">
+            <div class="cliente-header-container">
+                <!-- Brand -->
+                <div class="cliente-header-brand">
+                    <div class="brand-logo">
+                        <i class="fas fa-scissors"></i>
+                    </div>
+                    <div class="brand-text">
+                        <span class="brand-name">Corte Digital</span>
+                        <span class="brand-subtitle">Seu Estilo, Nossa Paixão</span>
+                    </div>
                 </div>
-                <span>Corte Digital</span>
-            </div>
-            <div class="header-center" style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 1rem;">
-                <button class="header-nav-btn" onclick="showSection('home-cliente')" title="Dashboard">
-                    <i class="fas fa-home"></i>
-                    <span>Dashboard</span>
-                </button>
-                <button class="header-nav-btn" onclick="showSection('agendamentos-cliente')" title="Agendamentos">
-                    <i class="fas fa-calendar-alt"></i>
-                    <span>Agendamentos</span>
-                </button>
-                <button class="header-nav-btn" onclick="showSection('historico-cliente')" title="Histórico">
-                    <i class="fas fa-history"></i>
-                    <span>Histórico</span>
-                </button>
-            </div>
-            <div class="header-actions">
-                <button class="header-btn tooltip-modern" data-tooltip="Alternar Tema" onclick="toggleTheme()">
-                    <i class="fas fa-moon" id="theme-icon"></i>
-                </button>
-                <button class="header-btn tooltip-modern" data-tooltip="Perfil" onclick="showSection('perfil-cliente')">
-                    <i class="fas fa-user-circle"></i>
-                </button>
-                <button class="header-btn tooltip-modern" data-tooltip="Sair" onclick="logout()">
-                    <i class="fas fa-sign-out-alt"></i>
-                </button>
+
+                <!-- Navigation -->
+                <nav class="cliente-header-nav">
+                    <button class="nav-item active" onclick="showSection('home-cliente')" data-section="home-cliente">
+                        <i class="fas fa-home"></i>
+                        <span>Início</span>
+                    </button>
+                    <button class="nav-item" onclick="showSection('agendamentos-cliente')" data-section="agendamentos-cliente">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Agendamentos</span>
+                    </button>
+                    <button class="nav-item" onclick="showSection('historico-cliente')" data-section="historico-cliente">
+                        <i class="fas fa-history"></i>
+                        <span>Histórico</span>
+                    </button>
+                </nav>
+
+                <!-- Actions -->
+                <div class="cliente-header-actions">
+                    <button class="action-btn" onclick="toggleTheme()" title="Alternar Tema">
+                        <i class="fas fa-moon" id="theme-icon"></i>
+                    </button>
+                    <div class="user-menu">
+                        <button class="user-menu-btn" onclick="toggleUserMenu()">
+                            <div class="user-avatar">{{ nome[0] if nome else 'C' }}</div>
+                            <span class="user-name">{{ nome }}</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="user-menu-dropdown" id="user-menu-dropdown">
+                            <a href="#" onclick="showSection('perfil-cliente'); return false;" class="menu-item">
+                                <i class="fas fa-user-circle"></i>
+                                <span>Meu Perfil</span>
+                            </a>
+                            <a href="#" onclick="logout(); return false;" class="menu-item">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Sair</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </header>
 
@@ -66,71 +89,75 @@
                 <div id="home-cliente" class="content-section active">
                     
                     <!-- Hero Section -->
-                    <div class="hero-section">
-                        <div class="hero-content">
-                            <h1 class="hero-greeting">Olá, {{ nome }}! 👋</h1>
-                            <p class="hero-subtitle">Pronto para agendar seu próximo corte?</p>
-                            <button class="hero-cta" onclick="showSection('agendamentos-cliente'); setTimeout(() => switchTab('novo-agendamento'), 100);">
-                                <i class="fas fa-calendar-plus"></i>
-                                Agendar Novo Corte
-                            </button>
+                    <div class="cliente-hero">
+                        <div class="cliente-hero-background">
+                            <div class="hero-circle hero-circle-1"></div>
+                            <div class="hero-circle hero-circle-2"></div>
+                            <div class="hero-circle hero-circle-3"></div>
                         </div>
-                    </div>
-
-                    <!-- Stats Grid -->
-                    <div class="stats-grid">
-                        <div class="stat-card" onclick="showSection('agendamentos-cliente'); setTimeout(() => switchTab('meus-agendamentos'), 100);">
-                            <div class="stat-header">
-                                <div class="stat-icon blue">
-                                    <i class="fas fa-calendar-check"></i>
+                        
+                        <div class="cliente-hero-content">
+                            <div class="hero-greeting">
+                                <h1>Olá, {{ nome }}! 👋</h1>
+                                <p>Pronto para seu próximo visual incrível?</p>
+                            </div>
+                            
+                            <div class="hero-stats-quick">
+                                <div class="quick-stat">
+                                    <div class="quick-stat-icon">
+                                        <i class="fas fa-calendar-check"></i>
+                                    </div>
+                                    <div class="quick-stat-content">
+                                        <div class="quick-stat-value" id="hero-stat-ativos">0</div>
+                                        <div class="quick-stat-label">Ativos</div>
+                                    </div>
+                                </div>
+                                <div class="quick-stat">
+                                    <div class="quick-stat-icon">
+                                        <i class="fas fa-check-circle"></i>
+                                    </div>
+                                    <div class="quick-stat-content">
+                                        <div class="quick-stat-value" id="hero-stat-concluidos">0</div>
+                                        <div class="quick-stat-label">Concluídos</div>
+                                    </div>
+                                </div>
+                                <div class="quick-stat">
+                                    <div class="quick-stat-icon">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div class="quick-stat-content">
+                                        <div class="quick-stat-value" id="hero-stat-proximo">--</div>
+                                        <div class="quick-stat-label">Próximo</div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="stat-content">
-                                <div class="stat-value" id="stat-total">0</div>
-                                <div class="stat-label">Agendamentos Ativos</div>
-                            </div>
-                        </div>
-
-                        <div class="stat-card" onclick="showSection('historico-cliente')">
-                            <div class="stat-header">
-                                <div class="stat-icon green">
-                                    <i class="fas fa-check-circle"></i>
-                                </div>
-                            </div>
-                            <div class="stat-content">
-                                <div class="stat-value" id="stat-concluidos">0</div>
-                                <div class="stat-label">Cortes Realizados</div>
-                            </div>
-                        </div>
-
-                        <div class="stat-card">
-                            <div class="stat-header">
-                                <div class="stat-icon orange">
-                                    <i class="fas fa-clock"></i>
-                                </div>
-                            </div>
-                            <div class="stat-content">
-                                <div class="stat-value" id="stat-proximo">--</div>
-                                <div class="stat-label">Próximo Agendamento</div>
+                            
+                            <div class="hero-actions">
+                                <button class="hero-btn primary" onclick="showSection('agendamentos-cliente'); setTimeout(() => switchTab('novo-agendamento'), 100);">
+                                    <i class="fas fa-calendar-plus"></i>
+                                    <span>Agendar Novo Corte</span>
+                                </button>
+                                <button class="hero-btn secondary" onclick="showSection('agendamentos-cliente'); setTimeout(() => switchTab('meus-agendamentos'), 100);">
+                                    <i class="fas fa-list"></i>
+                                    <span>Meus Agendamentos</span>
+                                </button>
                             </div>
                         </div>
                     </div>
 
                     <!-- Próximos Agendamentos -->
-                    <div class="section">
-                        <div class="section-header">
-                            <h2 class="section-title">
-                                <i class="fas fa-calendar-alt"></i>
-                                Próximos Agendamentos
-                            </h2>
-                            <button class="section-action" onclick="showSection('agendamentos-cliente')">
-                                Ver Todos
+                    <div class="proximos-section">
+                        <div class="section-header-modern">
+                            <div>
+                                <h2>Próximos Agendamentos</h2>
+                                <p>Seus compromissos agendados</p>
+                            </div>
+                            <button class="btn-link" onclick="showSection('agendamentos-cliente')">
+                                Ver todos <i class="fas fa-arrow-right"></i>
                             </button>
                         </div>
-                        <div id="proximos-agendamentos-lista">
-                            <!-- Loading skeleton -->
-                            <div class="skeleton skeleton-card"></div>
-                            <div class="skeleton skeleton-card"></div>
+                        <div id="proximos-agendamentos-lista" class="appointments-preview">
+                            <!-- Será preenchido via JS -->
                         </div>
                     </div>
 
@@ -479,5 +506,35 @@
     <script src="{{ url_for('static', filename='js/cliente/novo-agendamento.js') }}?v=8"></script>
     <!-- Main Index -->
     <script src="{{ url_for('static', filename='js/index.js') }}?v=8"></script>
+    
+    <script>
+        // Função para alternar menu do usuário
+        function toggleUserMenu() {
+            const menu = document.querySelector('.user-menu');
+            menu.classList.toggle('active');
+        }
+        
+        // Fechar menu ao clicar fora
+        document.addEventListener('click', (e) => {
+            const menu = document.querySelector('.user-menu');
+            if (menu && !menu.contains(e.target)) {
+                menu.classList.remove('active');
+            }
+        });
+        
+        // Atualizar navegação ao trocar de seção
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.classList.add('active');
+            }
+            
+            // Atualizar navegação
+            document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
+            const activeBtn = document.querySelector(`.nav-item[data-section="${sectionId}"]`);
+            if (activeBtn) activeBtn.classList.add('active');
+        }
+    </script>
 </body>
 </html>
