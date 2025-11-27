@@ -80,6 +80,13 @@ def cancel_appointment(appointment_id: str):
     if not exigir_login():
         return jsonify({"success": False, "message": "Não autenticado"}), 401
     
+    # Remover notificações relacionadas ao agendamento cancelado
+    try:
+        from routes.notifications import delete_notification_by_data
+        delete_notification_by_data(appointment_id)
+    except Exception as e:
+        print(f"Erro ao remover notificação: {e}")
+    
     if not cancel_appointment_by_id(appointment_id):
         return jsonify({"success": False, "message": "Agendamento não encontrado"}), 404
     return jsonify({"success": True})
@@ -96,6 +103,15 @@ def update_status(appointment_id: str):
 
     if not update_appointment_status(appointment_id, status):
         return jsonify({"success": False, "message": "Agendamento não encontrado"}), 404
+    
+    # Remover notificações quando concluído ou cancelado
+    if status in ['concluido', 'cancelado']:
+        try:
+            from routes.notifications import delete_notification_by_data
+            delete_notification_by_data(appointment_id)
+        except Exception as e:
+            print(f"Erro ao remover notificação: {e}")
+    
     return jsonify({"success": True})
 
 
