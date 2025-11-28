@@ -88,37 +88,6 @@ def criar_tabelas(conn):
     """)
     print("  ✓ Tabela 'appointments' criada")
     
-    # Tabela de Estoque/Inventário
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS inventory (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            quantity INTEGER NOT NULL DEFAULT 0,
-            price REAL NOT NULL DEFAULT 0.0,
-            barbeiro_id INTEGER NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (barbeiro_id) REFERENCES users(id)
-        )
-    """)
-    print("  ✓ Tabela 'inventory' criada")
-    
-    # Tabela de Notificações
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS notifications (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER NOT NULL,
-            title TEXT NOT NULL,
-            message TEXT NOT NULL,
-            type TEXT DEFAULT 'info',
-            data TEXT,
-            read INTEGER DEFAULT 0,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (user_id) REFERENCES users(id)
-        )
-    """)
-    print("  ✓ Tabela 'notifications' criada")
-    
     # Tabela de Preços Personalizados por Barbeiro
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS barber_prices (
@@ -136,47 +105,8 @@ def criar_tabelas(conn):
     conn.commit()
     print("✅ Todas as tabelas criadas com sucesso!\n")
 
-def inserir_dados_demonstracao(conn):
-    """Insere dados de demonstração no banco."""
-    cursor = conn.cursor()
-    
-    print("📦 Inserindo dados de demonstração...\n")
-    
-    # 1. Usuários (Barbeiros e Clientes)
-    print("👥 Inserindo usuários...")
-    usuarios = [
-        # Barbeiros
-        ("Miguel Silva", "miguel@cortedigital.com", "senha123", "barbeiro", "(11) 98765-4321"),
-        ("João Santos", "joao@cortedigital.com", "senha123", "barbeiro", "(11) 98765-4322"),
-        ("Pedro Costa", "pedro@cortedigital.com", "senha123", "barbeiro", "(11) 98765-4323"),
-        
-        # Clientes
-        ("Carlos Oliveira", "carlos@email.com", "senha123", "cliente", "(11) 91234-5678"),
-        ("Ana Paula", "ana@email.com", "senha123", "cliente", "(11) 91234-5679"),
-        ("Roberto Lima", "roberto@email.com", "senha123", "cliente", "(11) 91234-5680"),
-        ("Fernanda Costa", "fernanda@email.com", "senha123", "cliente", "(11) 91234-5681"),
-        ("Lucas Martins", "lucas@email.com", "senha123", "cliente", "(11) 91234-5682"),
-    ]
-    
-    cursor.executemany("""
-        INSERT OR IGNORE INTO users (name, email, password, tipo, telefone)
-        VALUES (?, ?, ?, ?, ?)
-    """, usuarios)
-    print(f"  ✓ {len(usuarios)} usuários inseridos")
-    
-    # 2. Serviços
-    print("✂️  Inserindo serviços...")
-    servicos = [
-        ("Corte", "Corte de cabelo masculino", 35.00, 30),
-        ("Corte + Barba", "Corte de cabelo + barba completa", 55.00, 45),
-        ("Barba", "Aparar e modelar barba", 25.00, 20),
-    ]
-    
-    cursor.executemany("""
-        INSERT OR IGNORE INTO services (name, description, price, duration)
-        VALUES (?, ?, ?, ?)
-    """, servicos)
-    print(f"  ✓ {len(servicos)} serviços inseridos")
+
+
     
     # 2.1. Preços Personalizados dos Barbeiros
     print("💰 Inserindo preços dos barbeiros...")
@@ -308,28 +238,7 @@ def inserir_dados_demonstracao(conn):
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, agendamentos)
     print(f"  ✓ {len(agendamentos)} agendamentos inseridos")
-    
-    # 4. Itens de Estoque
-    print("📦 Inserindo itens de estoque...")
-    estoque = [
-        ("Shampoo Profissional", 15, 25.00, barbeiros[0][0]),
-        ("Condicionador", 12, 22.00, barbeiros[0][0]),
-        ("Pomada Modeladora", 8, 35.00, barbeiros[0][0]),
-        ("Cera para Cabelo", 10, 30.00, barbeiros[0][0]),
-        ("Gel Fixador", 20, 18.00, barbeiros[0][0]),
-        ("Óleo para Barba", 6, 45.00, barbeiros[0][0]),
-        ("Navalha Descartável", 50, 2.50, barbeiros[0][0]),
-        ("Toalha", 30, 15.00, barbeiros[0][0]),
-    ]
-    
-    cursor.executemany("""
-        INSERT OR IGNORE INTO inventory (name, quantity, price, barbeiro_id)
-        VALUES (?, ?, ?, ?)
-    """, estoque)
-    print(f"  ✓ {len(estoque)} itens de estoque inseridos")
-    
-    conn.commit()
-    print("\n✅ Dados de demonstração inseridos com sucesso!\n")
+
 
 def exibir_resumo(conn):
     """Exibe resumo dos dados no banco."""
@@ -352,15 +261,12 @@ def exibir_resumo(conn):
     cursor.execute("SELECT COUNT(*) FROM appointments")
     agendamentos = cursor.fetchone()[0]
     
-    cursor.execute("SELECT COUNT(*) FROM inventory")
-    estoque = cursor.fetchone()[0]
     
     print(f"\n👥 Usuários:")
     print(f"   • Barbeiros: {barbeiros}")
     print(f"   • Clientes: {clientes}")
     print(f"\n✂️  Serviços: {servicos}")
     print(f"📅 Agendamentos: {agendamentos}")
-    print(f"📦 Itens de Estoque: {estoque}")
     
     print("\n" + "=" * 60)
     print("🔐 CREDENCIAIS DE ACESSO")
