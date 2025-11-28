@@ -1,0 +1,265 @@
+/* ===== NOTIFICAÇÕES INSTANTÂNEAS ===== */
+
+#instant-notifications-container {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 400px;
+  pointer-events: none;
+}
+
+.instant-notification {
+  background: var(--color-card);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  border-left: 5px solid var(--color-primary);
+  display: flex;
+  align-items: start;
+  gap: 16px;
+  opacity: 0;
+  transform: translateX(400px);
+  transition: all 0.3s ease;
+  pointer-events: all;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  min-height: 80px;
+}
+
+.instant-notification.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.instant-notification:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+  transform: translateX(-4px);
+}
+
+/* Tipos de Notificação */
+.instant-notification.preco_alterado {
+  border-left-color: #10b981;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, var(--color-card) 100%);
+}
+
+.instant-notification.new-appointment {
+  border-left-color: #3b82f6;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, var(--color-card) 100%);
+}
+
+.instant-notification.appointment-confirmed {
+  border-left-color: #10b981;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, var(--color-card) 100%);
+}
+
+.instant-notification.appointment-cancelled {
+  border-left-color: #ef4444;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, var(--color-card) 100%);
+}
+
+.instant-notification.warning {
+  border-left-color: #f59e0b;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.12) 0%, var(--color-card) 100%);
+}
+
+/* Ícone */
+.instant-notification-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, var(--color-primary) 0%, #8b5cf6 100%);
+  color: white;
+}
+
+.instant-notification.preco_alterado .instant-notification-icon {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.instant-notification.new-appointment .instant-notification-icon {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+.instant-notification.appointment-confirmed .instant-notification-icon {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.instant-notification.appointment-cancelled .instant-notification-icon {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
+.instant-notification.warning .instant-notification-icon {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+
+/* Conteúdo */
+.instant-notification-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.instant-notification-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 8px;
+  letter-spacing: 0.3px;
+}
+
+.instant-notification-message {
+  font-size: 15px;
+  color: var(--color-text);
+  line-height: 1.6;
+  word-wrap: break-word;
+  font-weight: 500;
+}
+
+/* Destacar emojis e valores na mensagem */
+.instant-notification-message strong {
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+/* Botão Fechar */
+.instant-notification-close {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.instant-notification-close:hover {
+  background: var(--color-background);
+  color: var(--color-text);
+}
+
+/* Barra de Progresso */
+.instant-notification::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-primary) 0%, #8b5cf6 100%);
+  animation: progress 8s linear;
+}
+
+@keyframes progress {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+/* Badge de Notificações no Header */
+#notification-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+#notification-icon.has-notifications {
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-4px);
+  }
+  75% {
+    transform: translateX(4px);
+  }
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  #instant-notifications-container {
+    top: 60px;
+    right: 12px;
+    left: 12px;
+    max-width: none;
+  }
+  
+  .instant-notification {
+    padding: 16px;
+  }
+  
+  .instant-notification-icon {
+    width: 44px;
+    height: 44px;
+    font-size: 22px;
+  }
+  
+  .instant-notification-title {
+    font-size: 15px;
+  }
+  
+  .instant-notification-message {
+    font-size: 14px;
+  }
+}
+
+/* Animação de Entrada Escalonada */
+.instant-notification:nth-child(1) {
+  transition-delay: 0s;
+}
+
+.instant-notification:nth-child(2) {
+  transition-delay: 0.1s;
+}
+
+.instant-notification:nth-child(3) {
+  transition-delay: 0.2s;
+}
+
+.instant-notification:nth-child(4) {
+  transition-delay: 0.3s;
+}
+
+.instant-notification:nth-child(5) {
+  transition-delay: 0.4s;
+}
