@@ -118,14 +118,14 @@ def update_barber_prices():
             # Criar mensagem de notificação
             if len(precos_alterados) == 1:
                 mudanca = precos_alterados[0]
-                titulo = "Atualização de Preço"
+                titulo = "💰 Atualização de Preço"
                 if mudanca['preco_novo'] < mudanca['preco_antigo']:
-                    mensagem = f"🎉 Boa notícia! O barbeiro {barbeiro_nome} reduziu o preço de {mudanca['servico']} de R$ {mudanca['preco_antigo']:.2f} para R$ {mudanca['preco_novo']:.2f}!"
+                    mensagem = f"Boa notícia! O barbeiro {barbeiro_nome} reduziu o preço de {mudanca['servico']} de R$ {mudanca['preco_antigo']:.2f} para R$ {mudanca['preco_novo']:.2f}"
                 else:
-                    mensagem = f"📢 O barbeiro {barbeiro_nome} atualizou o preço de {mudanca['servico']} de R$ {mudanca['preco_antigo']:.2f} para R$ {mudanca['preco_novo']:.2f}"
+                    mensagem = f"O barbeiro {barbeiro_nome} atualizou o preço de {mudanca['servico']} de R$ {mudanca['preco_antigo']:.2f} para R$ {mudanca['preco_novo']:.2f}"
             else:
-                titulo = "Atualização de Preços"
-                mensagem = f"📢 O barbeiro {barbeiro_nome} atualizou os preços de {len(precos_alterados)} serviços. Confira os novos valores!"
+                titulo = "💰 Atualização de Preços"
+                mensagem = f"O barbeiro {barbeiro_nome} atualizou os preços de {len(precos_alterados)} serviços. Confira os novos valores!"
             
             # Buscar IDs dos clientes frequentes
             from db import Cliente
