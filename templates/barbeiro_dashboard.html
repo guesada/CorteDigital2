@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/shared/styles.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/shared/visual-improvements.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/shared/modern-upgrade.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/shared/notifications.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/shared/proximos-agendamentos.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/shared/header-navbar.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/barbeiro/header-modern.css') }}">
@@ -58,10 +57,6 @@
                 <div class="barber-header-actions">
                     <button class="action-btn" onclick="toggleTheme()" title="Alternar Tema">
                         <i class="fas fa-moon" id="theme-icon"></i>
-                    </button>
-                    <button class="action-btn notification-btn" onclick="showNotifications()" title="Notificações">
-                        <i class="fas fa-bell"></i>
-                        <span class="notification-badge" style="display: none;">0</span>
                     </button>
                     <div class="user-menu">
                         <button class="user-menu-btn" onclick="toggleUserMenu()">
@@ -432,7 +427,6 @@
     <script src="{{ url_for('static', filename='js/shared/theme.js') }}"></script>
     <script src="{{ url_for('static', filename='js/shared/navigation.js') }}"></script>
     <script src="{{ url_for('static', filename='js/shared/auth.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/shared/notifications.js') }}"></script>
     <script src="{{ url_for('static', filename='js/shared/micro-interactions.js') }}"></script>
     <script src="{{ url_for('static', filename='js/barbeiro/barbeiro-dashboard.js') }}"></script>
     <script src="{{ url_for('static', filename='js/barbeiro/precos.js') }}"></script>
@@ -506,9 +500,7 @@
                 const result = await response.json();
                 if (result.success) {
                     e.target.reset();
-                    if (typeof showNotificationToast === 'function') {
-                        showNotificationToast('Produto adicionado com sucesso!', 'success');
-                    }
+                    alert('Produto adicionado com sucesso!');
                     loadProducts();
                 } else {
                     alert('Erro ao adicionar produto: ' + result.message);
@@ -592,11 +584,7 @@
                 
                 const result = await response.json();
                 if (result.success) {
-                    if (typeof showNotificationToast === 'function') {
-                        showNotificationToast('Preços atualizados com sucesso!', 'success');
-                    } else {
-                        alert('Preços atualizados com sucesso!');
-                    }
+                    alert('Preços atualizados com sucesso!');
                 } else {
                     alert('Erro ao atualizar preços: ' + result.message);
                 }
