@@ -316,10 +316,17 @@ async function loadAvailableTimes() {
         isSelected ? 'selected' : ''
       ].filter(Boolean).join(' ');
       
+      let statusText = '';
+      if (isOccupied) {
+        statusText = '<div class="time-slot-status occupied">Ocupado</div>';
+      } else if (isPast) {
+        statusText = '<div class="time-slot-status past">Passou</div>';
+      }
+      
       return `
         <div class="${classes}" onclick="selectTime('${time}')">
-          ${time}
-          ${isOccupied ? '<div style="font-size: 0.75rem; margin-top: 0.25rem;">Ocupado</div>' : ''}
+          <div class="time-slot-time">${time}</div>
+          ${statusText}
         </div>
       `;
     }).join('');

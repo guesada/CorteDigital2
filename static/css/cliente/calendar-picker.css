@@ -259,6 +259,36 @@
   transform: translateY(-2px);
 }
 
+/* Status dos horários */
+.time-slot-time {
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.time-slot-status {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 0.25rem;
+}
+
+.time-slot-status.occupied {
+  color: #ef4444;
+}
+
+.time-slot-status.past {
+  color: #6b7280;
+}
+
+.time-slot.disabled {
+  opacity: 0.5;
+}
+
+.time-slot.disabled .time-slot-time {
+  text-decoration: line-through;
+}
+
 .time-slot.selected::before {
   content: '\f00c';
   font-family: 'Font Awesome 6 Free';
