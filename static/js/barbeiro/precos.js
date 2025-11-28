@@ -105,7 +105,9 @@ async function handlePricesSubmit(event) {
             // Mostrar mensagem de sucesso
             let message = 'Preços atualizados com sucesso!';
             if (result.clientes_notificados > 0) {
-                message += ` ${result.clientes_notificados} cliente${result.clientes_notificados > 1 ? 's foram notificados' : ' foi notificado'}.`;
+                message += ` ${result.clientes_notificados} cliente${result.clientes_notificados > 1 ? 's frequentes foram notificados' : ' frequente foi notificado'}.`;
+            } else if (result.clientes_frequentes === false) {
+                message += ' Nenhum cliente frequente (>5 agendamentos) para notificar.';
             }
             
             showSuccessMessage(message);

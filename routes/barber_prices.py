@@ -102,40 +102,67 @@ def update_barber_prices():
     
     db.session.commit()
     
-    # Criar notificações para clientes que já agendaram com este barbeiro
+    # Criar notificações apenas para clientes frequentes (>5 agendamentos)
     if precos_alterados:
-        # Buscar clientes únicos que têm agendamentos com este barbeiro
+        # Buscar todos os agendamentos deste barbeiro
         agendamentos = Appointment.query.filter_by(barbeiro_id=barbeiro_id).all()
-        clientes_emails = set(apt.cliente_email for apt in agendamentos if apt.cliente_email)
         
-        # Criar mensagem de notificação
-        if len(precos_alterados) == 1:
-            mudanca = precos_alterados[0]
-            if mudanca['preco_novo'] < mudanca['preco_antigo']:
-                mensagem = f"🎉 Boa notícia! O barbeiro {barbeiro_nome} reduziu o preço de {mudanca['servico']} de R$ {mudanca['preco_antigo']:.2f} para R$ {mudanca['preco_novo']:.2f}!"
+        # Contar agendamentos por cliente
+        from collections import Counter
+        clientes_count = Counter(apt.cliente_email for apt in agendamentos if apt.cliente_email)
+        
+        # Filtrar apenas clientes frequentes (>5 agendamentos)
+        clientes_frequentes = [email for email, count in clientes_count.items() if count > 5]
+        
+        if clientes_frequentes:
+            # Criar mensagem de notificação
+            if len(precos_alterados) == 1:
+                mudanca = precos_alterados[0]
+                titulo = "Atualização de Preço"
+                if mudanca['preco_novo'] < mudanca['preco_antigo']:
+                    mensagem = f"🎉 Boa notícia! O barbeiro {barbeiro_nome} reduziu o preço de {mudanca['servico']} de R$ {mudanca['preco_antigo']:.2f} para R$ {mudanca['preco_novo']:.2f}!"
+                else:
+                    mensagem = f"📢 O barbeiro {barbeiro_nome} atualizou o preço de {mudanca['servico']} de R$ {mudanca['preco_antigo']:.2f} para R$ {mudanca['preco_novo']:.2f}"
             else:
-                mensagem = f"📢 O barbeiro {barbeiro_nome} atualizou o preço de {mudanca['servico']} de R$ {mudanca['preco_antigo']:.2f} para R$ {mudanca['preco_novo']:.2f}"
+                titulo = "Atualização de Preços"
+                mensagem = f"📢 O barbeiro {barbeiro_nome} atualizou os preços de {len(precos_alterados)} serviços. Confira os novos valores!"
+            
+            # Buscar IDs dos clientes frequentes
+            from db import Cliente
+            clientes = Cliente.query.filter(Cliente.email.in_(clientes_frequentes)).all()
+            
+            print(f"🔔 Criando notificações para {len(clientes)} clientes frequentes")
+            
+            # Criar notificação para cada cliente frequente
+            for cliente in clientes:
+                print(f"  📧 Notificando cliente: {cliente.nome} (ID: {cliente.id}, Email: {cliente.email})")
+                notificacao = Notification(
+                    user_id=cliente.id,
+                    title=titulo,
+                    message=mensagem,
+                    type="preco_alterado",
+                    data=None,
+                    is_read=False
+                )
+                db.session.add(notificacao)
+            
+            db.session.commit()
+            print(f"✅ {len(clientes)} notificações criadas com sucesso!")
+            
+            return jsonify({
+                "success": True, 
+                "message": f"Preços atualizados! {len(clientes_frequentes)} clientes frequentes foram notificados.",
+                "clientes_notificados": len(clientes_frequentes),
+                "clientes_frequentes": True
+            })
         else:
-            mensagem = f"📢 O barbeiro {barbeiro_nome} atualizou os preços de {len(precos_alterados)} serviços. Confira os novos valores!"
-        
-        # Criar notificação para cada cliente
-        for cliente_email in clientes_emails:
-            notificacao = Notification(
-                usuario_email=cliente_email,
-                tipo="preco_alterado",
-                mensagem=mensagem,
-                lida=False,
-                data=datetime.utcnow().isoformat()
-            )
-            db.session.add(notificacao)
-        
-        db.session.commit()
-        
-        return jsonify({
-            "success": True, 
-            "message": f"Preços atualizados! {len(clientes_emails)} clientes foram notificados.",
-            "clientes_notificados": len(clientes_emails)
-        })
+            db.session.commit()
+            return jsonify({
+                "success": True, 
+                "message": "Preços atualizados! Nenhum cliente frequente (>5 agendamentos) para notificar.",
+                "clientes_notificados": 0,
+                "clientes_frequentes": False
+            })
     
     return jsonify({"success": True, "message": "Preços atualizados com sucesso"})
 
