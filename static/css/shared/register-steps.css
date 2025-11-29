@@ -1,0 +1,207 @@
+/**
+ * Cadastro Progressivo - Steps
+ */
+
+/* Progress Bar */
+.register-progress {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 32px;
+    padding: 20px 0;
+}
+
+.progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    z-index: 1;
+}
+
+.step-number {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--color-background);
+    border: 2px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--color-text-secondary);
+    transition: all 0.3s;
+}
+
+.step-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    transition: all 0.3s;
+}
+
+.progress-step.active .step-number {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+    box-shadow: 0 4px 12px rgba(var(--color-primary-rgb), 0.3);
+}
+
+.progress-step.active .step-label {
+    color: var(--color-primary);
+}
+
+.progress-step.completed .step-number {
+    background: var(--color-success, #10b981);
+    border-color: var(--color-success, #10b981);
+    color: white;
+}
+
+.progress-step.completed .step-label {
+    color: var(--color-success, #10b981);
+}
+
+.progress-line {
+    width: 60px;
+    height: 2px;
+    background: var(--color-border);
+    margin: 0 8px;
+    position: relative;
+    top: -12px;
+}
+
+/* Register Steps */
+.register-step {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Step Buttons */
+.register-step-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.btn-back {
+    padding: 14px 24px;
+    background: var(--color-background);
+    color: var(--color-text);
+    border: 2px solid var(--color-border);
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-back:hover {
+    border-color: var(--color-primary);
+    background: var(--color-surface);
+}
+
+/* Days Selector (já existe no index.html) */
+.days-selector {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.day-checkbox {
+    position: relative;
+    cursor: pointer;
+}
+
+.day-checkbox input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.day-checkbox span {
+    display: block;
+    padding: 10px 4px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    border: 2px solid var(--color-border);
+    border-radius: 8px;
+    background: var(--color-background);
+    color: var(--color-text-secondary);
+    transition: all 0.3s ease;
+}
+
+.day-checkbox input[type="checkbox"]:checked + span {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+}
+
+.day-checkbox:hover span {
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+}
+
+/* Time Range */
+.time-range {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .progress-line {
+        width: 40px;
+    }
+    
+    .step-label {
+        font-size: 11px;
+    }
+    
+    .step-number {
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
+    }
+    
+    .days-selector {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .register-progress {
+        padding: 16px 0;
+    }
+    
+    .progress-line {
+        width: 30px;
+    }
+    
+    .step-label {
+        display: none;
+    }
+    
+    .days-selector {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
