@@ -1,6 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-from sqlalchemy.dialects.mysql import LONGTEXT
 import json
 
 db = SQLAlchemy()
@@ -40,10 +39,10 @@ class Barber(db.Model):
     email = db.Column(db.String(150), unique=True, nullable=False)
     senha = db.Column(db.String(200), nullable=False)
     foto = db.Column(db.String(400))
-    especialidades = db.Column(LONGTEXT)  # store JSON list
+    especialidades = db.Column(db.Text)  # store JSON list
     avaliacao = db.Column(db.Float, default=5.0)
     preco_base = db.Column(db.Float, default=0.0)
-    disponibilidade = db.Column(LONGTEXT)
+    disponibilidade = db.Column(db.Text)
     telefone = db.Column(db.String(20))
     endereco = db.Column(db.String(300))
 
@@ -134,7 +133,7 @@ class Report(db.Model):
     __tablename__ = "reports"
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(100))
-    dados = db.Column(LONGTEXT)
+    dados = db.Column(db.Text)
 
     def to_dict(self):
         return {"id": self.id, "nome": self.nome, "dados": json.loads(self.dados or "{}")}
