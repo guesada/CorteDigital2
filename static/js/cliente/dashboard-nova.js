@@ -289,16 +289,6 @@ async function carregarAgendamentos() {
                                     </button>
                                 </div>
                             `;
-                        } else if (aptStatus === 'concluido') {
-                            // Mostrar botão de avaliar para agendamentos concluídos
-                            return `
-                                <div class="agendamento-actions">
-                                    <button class="btn-avaliar" onclick="openReviewModal('${apt.id}')" id="btn-review-${apt.id}">
-                                        <i class="fas fa-star"></i>
-                                        Avaliar Atendimento
-                                    </button>
-                                </div>
-                            `;
                         } else if (hasPassed && aptStatus !== 'cancelado' && aptStatus !== 'concluido') {
                             return `
                                 <div class="agendamento-info-message">
@@ -313,9 +303,6 @@ async function carregarAgendamentos() {
             `;
         }).join('');
         
-        // Verificar quais agendamentos já foram avaliados
-        checkReviewedAppointments(appointments);
-        
     } catch (error) {
         console.error('❌ Erro ao carregar agendamentos:', error);
         container.innerHTML = `
@@ -327,37 +314,6 @@ async function carregarAgendamentos() {
                 <div class="empty-agendamentos-text">${error.message}</div>
             </div>
         `;
-    }
-}
-
-// ===== VERIFICAR AGENDAMENTOS AVALIADOS =====
-async function checkReviewedAppointments(appointments) {
-    try {
-        const response = await fetch('/api/reviews');
-        const result = await response.json();
-        
-        if (result.success) {
-            const reviews = result.data;
-            
-            appointments.forEach(apt => {
-                if (apt.status === 'concluido') {
-                    const review = reviews.find(r => r.appointment_id === apt.id);
-                    const btnEl = document.getElementById(`btn-review-${apt.id}`);
-                    
-                    if (review && btnEl) {
-                        // Substituir botão por badge de avaliado
-                        btnEl.outerHTML = `
-                            <div class="badge-avaliado">
-                                <i class="fas fa-check-circle"></i>
-                                Avaliado (${review.rating} ⭐)
-                            </div>
-                        `;
-                    }
-                }
-            });
-        }
-    } catch (error) {
-        console.error('Erro ao verificar avaliações:', error);
     }
 }
 
