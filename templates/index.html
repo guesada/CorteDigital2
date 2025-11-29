@@ -10,6 +10,72 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/shared/modern-upgrade.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/shared/login-forms.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Seletor de Dias */
+        .days-selector {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin-top: 8px;
+        }
+        
+        .day-checkbox {
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .day-checkbox input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        .day-checkbox span {
+            display: block;
+            padding: 10px 4px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+            border: 2px solid var(--color-border);
+            border-radius: 8px;
+            background: var(--color-background);
+            color: var(--color-text-secondary);
+            transition: all 0.3s ease;
+        }
+        
+        .day-checkbox input[type="checkbox"]:checked + span {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+        }
+        
+        .day-checkbox:hover span {
+            border-color: var(--color-primary);
+            transform: translateY(-2px);
+        }
+        
+        /* Seletor de Horários */
+        .time-selector {
+            margin-top: 8px;
+        }
+        
+        .time-range {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+        }
+        
+        @media (max-width: 768px) {
+            .days-selector {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .day-checkbox span {
+                font-size: 11px;
+                padding: 8px 2px;
+            }
+        }
+    </style>
 </head>
 <body class="dark-theme">
     
@@ -215,6 +281,81 @@
                             <label class="form-label">Confirmar Senha</label>
                             <input type="password" name="confirmPassword" class="form-control" placeholder="Confirme sua senha" required>
                         </div>
+                        
+                        <!-- Dias de Trabalho -->
+                        <div class="form-group">
+                            <label class="form-label">Dias de Trabalho</label>
+                            <div class="days-selector">
+                                <label class="day-checkbox">
+                                    <input type="checkbox" name="workDays" value="Segunda" checked>
+                                    <span>Seg</span>
+                                </label>
+                                <label class="day-checkbox">
+                                    <input type="checkbox" name="workDays" value="Terça" checked>
+                                    <span>Ter</span>
+                                </label>
+                                <label class="day-checkbox">
+                                    <input type="checkbox" name="workDays" value="Quarta" checked>
+                                    <span>Qua</span>
+                                </label>
+                                <label class="day-checkbox">
+                                    <input type="checkbox" name="workDays" value="Quinta" checked>
+                                    <span>Qui</span>
+                                </label>
+                                <label class="day-checkbox">
+                                    <input type="checkbox" name="workDays" value="Sexta" checked>
+                                    <span>Sex</span>
+                                </label>
+                                <label class="day-checkbox">
+                                    <input type="checkbox" name="workDays" value="Sábado" checked>
+                                    <span>Sáb</span>
+                                </label>
+                                <label class="day-checkbox">
+                                    <input type="checkbox" name="workDays" value="Domingo">
+                                    <span>Dom</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <!-- Horários de Trabalho -->
+                        <div class="form-group">
+                            <label class="form-label">Horários de Trabalho</label>
+                            <div class="time-selector">
+                                <div class="time-range">
+                                    <div style="flex: 1;">
+                                        <label style="font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px; display: block;">Início</label>
+                                        <select name="workTimeStart" class="form-control" required>
+                                            <option value="06:00">06:00</option>
+                                            <option value="07:00">07:00</option>
+                                            <option value="08:00" selected>08:00</option>
+                                            <option value="09:00">09:00</option>
+                                            <option value="10:00">10:00</option>
+                                            <option value="11:00">11:00</option>
+                                            <option value="12:00">12:00</option>
+                                        </select>
+                                    </div>
+                                    <div style="padding: 20px 8px 0 8px; color: var(--color-text-secondary);">até</div>
+                                    <div style="flex: 1;">
+                                        <label style="font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px; display: block;">Fim</label>
+                                        <select name="workTimeEnd" class="form-control" required>
+                                            <option value="14:00">14:00</option>
+                                            <option value="15:00">15:00</option>
+                                            <option value="16:00">16:00</option>
+                                            <option value="17:00">17:00</option>
+                                            <option value="18:00" selected>18:00</option>
+                                            <option value="19:00">19:00</option>
+                                            <option value="20:00">20:00</option>
+                                            <option value="21:00">21:00</option>
+                                            <option value="22:00">22:00</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div style="font-size: 12px; color: var(--color-text-secondary); margin-top: 8px;">
+                                    <i class="fas fa-info-circle"></i> Horários disponíveis serão gerados automaticamente
+                                </div>
+                            </div>
+                        </div>
+                        
                         <button type="submit" class="btn btn--primary btn-modern" style="width: 100%; margin-top: 8px;">
                             Criar Conta Profissional
                         </button>
