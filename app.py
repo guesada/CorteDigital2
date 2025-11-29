@@ -20,7 +20,7 @@ def configure_database():
     """Configura o banco de dados baseado no ambiente"""
     
     try:
-        from config_database import MYSQL_CONFIG, DATABASE_MODE
+        from config.config_database import MYSQL_CONFIG, DATABASE_MODE
     except ImportError:
         # Se não existir config, usar modo auto
         MYSQL_CONFIG = {
@@ -42,7 +42,7 @@ def configure_database():
         
     elif DATABASE_MODE == 'sqlite':
         # Forçar SQLite
-        db_path = os.path.join(os.path.dirname(__file__), 'corte_digital.db')
+        db_path = os.path.join(os.path.dirname(__file__), 'database', 'corte_digital.db')
         app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_path}"
         print(f"📊 Modo SQLite: {db_path}")
         
@@ -100,7 +100,7 @@ def configure_database():
         except Exception as e:
             # Fallback para SQLite
             print(f"⚠️  MySQL não disponível, usando SQLite local")
-            db_path = os.path.join(os.path.dirname(__file__), 'corte_digital.db')
+            db_path = os.path.join(os.path.dirname(__file__), 'database', 'corte_digital.db')
             app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_path}"
             print(f"📊 Modo Auto: Usando SQLite - {db_path}")
     
@@ -114,7 +114,7 @@ db.init_app(app)
 
 # Criar tabelas e popular com dados de exemplo se necessário
 with app.app_context():
-    from init_database import init_database_with_sample_data
+    from database.init_database import init_database_with_sample_data
     init_database_with_sample_data(app, db)
 
 register_routes(app)
