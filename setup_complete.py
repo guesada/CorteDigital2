@@ -5,7 +5,7 @@ Execute este script em qualquer máquina para configurar o sistema.
 """
 
 from app import app
-from db import db, Cliente, Barber, Service, Appointment, BarberPrice, Review, Statistic
+from db import db, Cliente, Barber, Service, Appointment, BarberPrice, Statistic
 from datetime import datetime, timedelta
 import random
 
@@ -232,72 +232,6 @@ def create_sample_appointments(barbers, clients):
     print(f"  ✓ {len(created_appointments)} agendamentos criados")
     return created_appointments
 
-def create_sample_reviews(barbers, clients, appointments):
-    """Criar avaliações de exemplo."""
-    print("\n⭐ Criando avaliações de exemplo...")
-    
-    # Pegar apenas agendamentos concluídos
-    completed_appointments = [a for a in appointments if a.status == 'concluido']
-    
-    if not completed_appointments:
-        print("  ⚠️ Nenhum agendamento concluído. Pulando avaliações.")
-        return
-    
-    # Criar avaliações para ~60% dos agendamentos concluídos
-    num_reviews = int(len(completed_appointments) * 0.6)
-    sample_appointments = random.sample(completed_appointments, min(num_reviews, len(completed_appointments)))
-    
-    comments = [
-        "Excelente atendimento! Muito profissional.",
-        "Adorei o corte, ficou perfeito!",
-        "Ambiente agradável e serviço de qualidade.",
-        "Recomendo! Voltarei com certeza.",
-        "Ótimo barbeiro, muito atencioso.",
-        "Serviço rápido e bem feito.",
-        "Melhor barbearia da região!",
-        "Profissional competente e simpático.",
-        "Corte impecável, parabéns!",
-        "Ambiente limpo e organizado."
-    ]
-    
-    created_reviews = 0
-    for appointment in sample_appointments:
-        # Verificar se já tem avaliação
-        existing = Review.query.filter_by(appointment_id=appointment.id).first()
-        if existing:
-            continue
-        
-        # Encontrar cliente
-        client = Cliente.query.filter_by(email=appointment.cliente_email).first()
-        if not client:
-            continue
-        
-        # Rating mais alto (4-5 estrelas na maioria)
-        rating = random.choices([3, 4, 5], weights=[10, 30, 60])[0]
-        
-        review = Review(
-            cliente_id=client.id,
-            barbeiro_id=appointment.barbeiro_id,
-            appointment_id=appointment.id,
-            rating=rating,
-            comment=random.choice(comments) if random.random() > 0.3 else ""
-        )
-        
-        db.session.add(review)
-        created_reviews += 1
-    
-    db.session.commit()
-    
-    # Atualizar média de avaliações dos barbeiros
-    for barber in barbers:
-        reviews = Review.query.filter_by(barbeiro_id=barber.id).all()
-        if reviews:
-            avg_rating = sum(r.rating for r in reviews) / len(reviews)
-            barber.avaliacao = round(avg_rating, 1)
-    
-    db.session.commit()
-    print(f"  ✓ {created_reviews} avaliações criadas")
-
 def main():
     """Executar setup completo."""
     print("=" * 60)
@@ -324,9 +258,6 @@ def main():
             # 6. Criar agendamentos
             appointments = create_sample_appointments(barbers, clients)
             
-            # 7. Criar avaliações
-            create_sample_reviews(barbers, clients, appointments)
-            
             print("\n" + "=" * 60)
             print("✅ SETUP CONCLUÍDO COM SUCESSO!")
             print("=" * 60)
@@ -335,7 +266,6 @@ def main():
             print(f"  • Clientes: {len(clients)}")
             print(f"  • Serviços: {Service.query.count()}")
             print(f"  • Agendamentos: {len(appointments)}")
-            print(f"  • Avaliações: {Review.query.count()}")
             print("\n🔐 Credenciais de acesso:")
             print("\n  BARBEIROS:")
             print("    Email: joao@barbershop.com | Senha: senha123")
