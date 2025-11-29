@@ -304,6 +304,17 @@ async function loadAvailableTimes() {
   }
   
   try {
+    // Buscar horários de trabalho do barbeiro
+    const scheduleRes = await fetch(`/api/barber-schedule/${bookingState.barber.id}`);
+    let barberSchedule = [];
+    
+    if (scheduleRes.ok) {
+      const scheduleData = await scheduleRes.json();
+      if (scheduleData.success) {
+        barberSchedule = scheduleData.data || [];
+      }
+    }
+    
     // Buscar horários ocupados
     const res = await fetch(`/api/appointments/for_barber/${bookingState.barber.id}?date=${bookingState.date}`, {
       credentials: 'include'
@@ -317,15 +328,30 @@ async function loadAvailableTimes() {
         .map(a => a.time);
     }
     
-    // Horários disponíveis (8h às 18h)
-    const times = [];
-    for (let hour = 8; hour < 18; hour++) {
-      times.push(`${hour.toString().padStart(2, '0')}:00`);
-      times.push(`${hour.toString().padStart(2, '0')}:30`);
+    // Determinar dia da semana da data selecionada
+    const selectedDate = new Date(bookingState.date + 'T00:00:00');
+    const dayNames = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+    const dayOfWeek = dayNames[selectedDate.getDay()];
+    
+    // Buscar horários de trabalho para este dia
+    const daySchedule = barberSchedule.find(d => d.dia === dayOfWeek);
+    
+    let times = [];
+    if (daySchedule && daySchedule.ativo && daySchedule.horarios && daySchedule.horarios.length > 0) {
+      // Usar horários configurados pelo barbeiro
+      times = daySchedule.horarios.sort();
+    } else {
+      // Se não houver configuração, mostrar mensagem
+      container.innerHTML = `
+        <div class="no-schedule-message">
+          <i class="fas fa-calendar-times"></i>
+          <p>O barbeiro não trabalha neste dia</p>
+        </div>
+      `;
+      return;
     }
     
     // Verificar se é hoje
-    const selectedDate = new Date(bookingState.date + 'T00:00:00');
     const today = new Date();
     const isToday = selectedDate.toDateString() === today.toDateString();
     
@@ -366,6 +392,12 @@ async function loadAvailableTimes() {
     
   } catch (error) {
     console.error('Erro ao carregar horários:', error);
+    container.innerHTML = `
+      <div class="error-message">
+        <i class="fas fa-exclamation-triangle"></i>
+        <p>Erro ao carregar horários disponíveis</p>
+      </div>
+    `;
   }
 }
 
