@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/barbeiro/agenda-inteligente.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/barbeiro/precos.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/barbeiro/barbeiro-professional.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/barbeiro/horarios.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="dark-theme">
@@ -45,6 +46,10 @@
                     <button class="nav-item" onclick="showSection('precos-barbeiro')" data-section="precos-barbeiro">
                         <i class="fas fa-dollar-sign"></i>
                         <span>Preços</span>
+                    </button>
+                    <button class="nav-item" onclick="showSection('horarios-barbeiro')" data-section="horarios-barbeiro">
+                        <i class="fas fa-clock"></i>
+                        <span>Horários</span>
                     </button>
                 </nav>
 
@@ -209,6 +214,31 @@
                             <div class="timeline-loading">
                                 <i class="fas fa-spinner fa-spin"></i>
                                 Carregando agendamentos...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Horários de Trabalho -->
+                <div id="horarios-barbeiro" class="content-section">
+                    <div class="horarios-page-container">
+                        
+                        <!-- Header -->
+                        <div class="horarios-page-header">
+                            <div class="horarios-page-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="horarios-page-content">
+                                <h2>Horários de Trabalho</h2>
+                                <p>Configure os dias e horários em que você atende</p>
+                            </div>
+                        </div>
+
+                        <!-- Container de Horários -->
+                        <div id="horarios-container">
+                            <div class="horarios-loading">
+                                <i class="fas fa-spinner fa-spin"></i>
+                                Carregando horários...
                             </div>
                         </div>
                     </div>
@@ -380,6 +410,7 @@
     <script src="{{ url_for('static', filename='js/shared/micro-interactions.js') }}"></script>
     <script src="{{ url_for('static', filename='js/barbeiro/barbeiro-dashboard.js') }}"></script>
     <script src="{{ url_for('static', filename='js/barbeiro/precos.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/barbeiro/horarios.js') }}"></script>
     <script src="{{ url_for('static', filename='js/index.js') }}"></script>
     
     <script>
@@ -411,7 +442,9 @@
                 initPrecos();
             }
             
-
+            if (sectionId === 'horarios-barbeiro' && typeof initHorarios === 'function') {
+                initHorarios();
+            }
         }
         
         function toggleUserMenu() {
