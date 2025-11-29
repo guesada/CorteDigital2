@@ -595,3 +595,34 @@
     flex-direction: column;
   }
 }
+
+/* Mensagens de erro e aviso */
+.no-schedule-message,
+.error-message {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px 20px;
+    background: var(--color-background);
+    border-radius: 12px;
+    border: 2px dashed var(--color-border);
+}
+
+.no-schedule-message i,
+.error-message i {
+    font-size: 48px;
+    color: var(--color-text-secondary);
+    opacity: 0.5;
+    margin-bottom: 16px;
+    display: block;
+}
+
+.no-schedule-message p,
+.error-message p {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: 16px;
+}
+
+.error-message i {
+    color: #ef4444;
+}
