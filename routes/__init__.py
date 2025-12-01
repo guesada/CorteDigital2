@@ -1,4 +1,4 @@
-    """Registro das rotas (blueprints) do Corte Digital."""
+"""Registro das rotas (blueprints) do Corte Digital."""
 
 from . import appointments, auth, info, pages, barber_prices
 
