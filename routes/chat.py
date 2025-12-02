@@ -13,6 +13,44 @@ def register_chat_routes(app):
     app.register_blueprint(chat_bp, url_prefix='/api/chat')
 
 
+# Rota adicional para listar usuários disponíveis
+@chat_bp.route('/available-users', methods=['GET'])
+def get_available_users():
+    """Obtém lista de usuários disponíveis para conversa"""
+    if 'user_id' not in session:
+        return jsonify({'success': False, 'message': 'Não autenticado'}), 401
+    
+    try:
+        from database_config import get_database_connection
+        conn = get_database_connection()
+        cursor = conn.cursor()
+        
+        user_tipo = session.get('tipo', 'cliente')
+        
+        # Se é cliente, lista barbeiros. Se é barbeiro, lista clientes
+        if user_tipo == 'cliente':
+            cursor.execute("""
+                SELECT id, nome, email FROM barbers
+                ORDER BY nome
+            """)
+        else:
+            cursor.execute("""
+                SELECT id, nome, email FROM clientes
+                ORDER BY nome
+            """)
+        
+        users = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        
+        return jsonify({
+            'success': True,
+            'users': users
+        })
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)}), 500
+
+
 def register_socketio_events(socketio):
     """Registra os eventos WebSocket do chat"""
     
@@ -63,7 +101,10 @@ def register_socketio_events(socketio):
     @socketio.on('send_message')
     def handle_send_message(data):
         """Envia uma mensagem"""
+        print(f"📨 Recebeu send_message: {data}")
+        
         if 'user_id' not in session:
+            print("❌ Usuário não autenticado")
             emit('error', {'message': 'Não autenticado'})
             return
         
@@ -71,15 +112,20 @@ def register_socketio_events(socketio):
         message_text = data.get('message', '').strip()
         
         if not conversation_id or not message_text:
+            print("❌ Dados inválidos")
             emit('error', {'message': 'Dados inválidos'})
             return
         
         try:
             user_id = session['user_id']
             user_tipo = session['tipo']
+            
+            print(f"💾 Salvando mensagem: user_id={user_id}, tipo={user_tipo}, conv={conversation_id}")
             message = chat_service.send_message(conversation_id, user_id, user_tipo, message_text)
+            print(f"✅ Mensagem salva: {message}")
             
             # Envia mensagem para todos na conversa
+            print(f"📤 Emitindo new_message para sala conversation_{conversation_id}")
             emit('new_message', message, room=f'conversation_{conversation_id}')
             
             # Notifica destinatário sobre nova mensagem (para atualizar lista de conversas)
@@ -96,13 +142,19 @@ def register_socketio_events(socketio):
             
             recipient_id = conv['barbeiro_id'] if user_tipo == 'cliente' else conv['cliente_id']
             
+            print(f"🔔 Notificando destinatário user_{recipient_id}")
             emit('conversation_updated', {
                 'conversation_id': conversation_id,
                 'last_message': message_text,
                 'unread_increment': 1
             }, room=f'user_{recipient_id}')
             
+            print("✅ Mensagem enviada com sucesso!")
+            
         except Exception as e:
+            print(f"❌ Erro ao enviar mensagem: {e}")
+            import traceback
+            traceback.print_exc()
             emit('error', {'message': str(e)})
     
     @socketio.on('typing')
@@ -214,16 +266,20 @@ def get_users_by_type(user_type):
         conn = get_database_connection()
         cursor = conn.cursor()
         
+        current_user_id = session['user_id']
+        
         if user_type == 'barbeiro':
             cursor.execute("""
-                SELECT id, nome FROM barbers
+                SELECT id, nome, email FROM barbers
+                WHERE id != %s
                 ORDER BY nome
-            """)
+            """, (current_user_id if session.get('tipo') == 'barbeiro' else 0,))
         else:
             cursor.execute("""
-                SELECT id, nome FROM clientes
+                SELECT id, nome, email FROM clientes
+                WHERE id != %s
                 ORDER BY nome
-            """)
+            """, (current_user_id if session.get('tipo') == 'cliente' else 0,))
         
         users = cursor.fetchall()
         cursor.close()
