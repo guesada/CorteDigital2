@@ -6,8 +6,10 @@ from flask_socketio import SocketIO
 # Importa o registro de rotas e serviços da aplicação
 from routes import register_routes
 from routes.chat import register_chat_routes, register_socketio_events
+from routes.notifications import register_notifications_routes, register_notification_events
 import services
 import chat_service
+import notification_service
 
 # Cria a instância principal da aplicação Flask
 app = Flask(__name__)
@@ -17,8 +19,12 @@ app = Flask(__name__)
 CORS(app, supports_credentials=True, origins=["http://localhost:5001", "http://127.0.0.1:5001"])
 
 # Inicializa SocketIO para comunicação em tempo real
+import os
+is_production = os.environ.get('RENDER', False)
+async_mode = 'gevent' if is_production else 'threading'
+
 socketio = SocketIO(app, cors_allowed_origins=["http://localhost:5001", "http://127.0.0.1:5001"], 
-                    manage_session=False, async_mode='threading')
+                    manage_session=False, async_mode=async_mode)
 
 # Chave secreta para criptografia de sessões e cookies
 app.secret_key = "corte_digital_2025_secret_key"
@@ -31,18 +37,21 @@ app.config["SESSION_COOKIE_HTTPONLY"] = True  # Impede acesso aos cookies via Ja
 # Inicializa a conexão com o banco de dados e carrega dados iniciais
 services.init_app(app)
 
-# Cria tabelas do chat
+# Cria tabelas do chat e notificações
 try:
     chat_service.create_chat_tables()
+    notification_service.create_notifications_table()
 except Exception as e:
-    print(f"Aviso ao criar tabelas de chat: {e}")
+    print(f"Aviso ao criar tabelas: {e}")
 
 # Registra todas as rotas da aplicação (endpoints)
 register_routes(app)
 register_chat_routes(app)
+register_notifications_routes(app)
 
 # Registra eventos WebSocket
 register_socketio_events(socketio)
+register_notification_events(socketio)
 
 
 @app.before_request
@@ -97,4 +106,8 @@ if __name__ == "__main__":
     host = os.environ.get("HOST", "127.0.0.1")
     debug = os.environ.get("DEBUG", "True") == "True"
     
-    socketio.run(app, host=host, port=port, debug=debug)
+    print(f"🚀 Iniciando servidor em {host}:{port}")
+    print(f"🔧 Modo: {'Produção' if os.environ.get('RENDER') else 'Desenvolvimento'}")
+    print(f"🔌 Async mode: {async_mode}")
+    
+    socketio.run(app, host=host, port=port, debug=debug, allow_unsafe_werkzeug=True)
