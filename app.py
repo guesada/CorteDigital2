@@ -11,9 +11,10 @@ from flask_socketio import SocketIO
 from routes import register_routes
 from routes.chat import register_chat_routes, register_socketio_events
 from routes.notifications import register_notifications_routes, register_notification_events
+from routes.analytics import register_analytics_routes
+from routes.reviews import register_reviews_routes
 import services
-import chat_service
-import notification_service
+from services import chat_service, notification_service, analytics_service, review_service
 
 # Cria a instância principal da aplicação Flask
 app = Flask(__name__)
@@ -41,19 +42,26 @@ app.config["SESSION_COOKIE_HTTPONLY"] = True  # Impede acesso aos cookies via Ja
 # Inicializa a conexão com o banco de dados e carrega dados iniciais
 services.init_app(app)
 
-# Cria tabelas do chat e notificações
+# Cria tabelas do sistema
 try:
+    print("📊 Criando tabelas do sistema...")
     chat_service.create_chat_tables()
     notification_service.create_notifications_table()
+    review_service.create_reviews_table()
+    print("✅ Todas as tabelas criadas!")
 except Exception as e:
-    print(f"Aviso ao criar tabelas: {e}")
+    print(f"⚠️  Aviso ao criar tabelas: {e}")
 
 # Registra todas as rotas da aplicação (endpoints)
+print("🔌 Registrando rotas...")
 register_routes(app)
 register_chat_routes(app)
 register_notifications_routes(app)
+register_analytics_routes(app)
+register_reviews_routes(app, socketio)
 
 # Registra eventos WebSocket
+print("⚡ Registrando eventos WebSocket...")
 register_socketio_events(socketio)
 register_notification_events(socketio)
 
