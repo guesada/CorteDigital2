@@ -21,34 +21,49 @@ class ChatPage {
     }
     
     connectSocket() {
+        console.log('🔌 Conectando ao WebSocket...');
+        
         this.socket = io({
             transports: ['websocket', 'polling']
         });
         
         this.socket.on('connect', () => {
-            console.log('✅ Chat conectado');
+            console.log('✅ WebSocket conectado! ID:', this.socket.id);
             this.showToast('Conectado', 'success');
         });
         
         this.socket.on('disconnect', () => {
-            console.log('❌ Chat desconectado');
+            console.log('❌ WebSocket desconectado');
             this.showToast('Desconectado - Tentando reconectar...', 'error');
         });
         
+        this.socket.on('connected', (data) => {
+            console.log('✅ Servidor confirmou conexão:', data);
+        });
+        
         this.socket.on('new_message', (message) => {
+            console.log('📨 Nova mensagem recebida:', message);
             this.handleNewMessage(message);
         });
         
         this.socket.on('user_typing', (data) => {
+            console.log('⌨️ Usuário digitando:', data);
             this.handleUserTyping(data);
         });
         
         this.socket.on('messages_read', (data) => {
-            console.log('Mensagens lidas:', data);
+            console.log('✓✓ Mensagens lidas:', data);
         });
         
         this.socket.on('conversation_updated', (data) => {
+            console.log('🔄 Conversa atualizada:', data);
             this.loadConversations();
+        });
+        
+        this.socket.on('error', (error) => {
+            console.error('❌ Erro no WebSocket:', error);
+            console.error('Detalhes do erro:', JSON.stringify(error, null, 2));
+            this.showToast(error.message || 'Erro no chat', 'error');
         });
     }
     
@@ -317,13 +332,24 @@ class ChatPage {
         const input = document.getElementById('messageInput');
         const message = input.value.trim();
         
-        if (!message || !this.currentConversationId) return;
+        if (!message || !this.currentConversationId) {
+            console.warn('⚠️ Não pode enviar: mensagem vazia ou sem conversa');
+            return;
+        }
+        
+        console.log('📤 Enviando mensagem:', {
+            conversation_id: this.currentConversationId,
+            message: message,
+            socket_connected: this.socket.connected
+        });
         
         // Envia via WebSocket
         this.socket.emit('send_message', {
             conversation_id: this.currentConversationId,
             message: message
         });
+        
+        console.log('✅ Mensagem enviada via WebSocket');
         
         // Limpa input
         input.value = '';
@@ -341,13 +367,18 @@ class ChatPage {
     }
     
     handleNewMessage(message) {
+        console.log('📨 Processando nova mensagem:', message);
+        console.log('📍 Conversa atual:', this.currentConversationId);
+        
         if (message.conversation_id === this.currentConversationId) {
+            console.log('✅ Mensagem é da conversa atual - adicionando à tela');
             // Adiciona mensagem à conversa atual
             const container = document.getElementById('messagesContainer');
             const messageEl = this.createMessageElement(message);
             container.appendChild(messageEl);
             this.scrollToBottom();
         } else {
+            console.log('📋 Mensagem de outra conversa - atualizando lista');
             // Atualiza lista de conversas
             this.loadConversations();
         }
@@ -383,15 +414,17 @@ class ChatPage {
         
         // Carrega lista de usuários disponíveis
         try {
-            const userType = window.userType === 'cliente' ? 'barbeiro' : 'cliente';
-            const response = await fetch(`/api/users/${userType}`);
+            const response = await fetch('/api/chat/available-users');
             const data = await response.json();
             
             if (data.success) {
                 this.renderUsersList(data.users);
+            } else {
+                this.showToast(data.message || 'Erro ao carregar usuários', 'error');
             }
         } catch (error) {
             console.error('Erro ao carregar usuários:', error);
+            this.showToast('Erro ao carregar usuários', 'error');
         }
     }
     
