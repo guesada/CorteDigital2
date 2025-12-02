@@ -3,7 +3,7 @@ Rotas de Notificações
 """
 from flask import Blueprint, jsonify, session
 from flask_socketio import emit
-import notification_service
+from services import notification_service
 
 notifications_bp = Blueprint('notifications', __name__)
 
