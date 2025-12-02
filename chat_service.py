@@ -161,10 +161,6 @@ def send_message(conversation_id, sender_id, sender_type, message):
     finally:
         cursor.close()
         conn.close()
-        
-    finally:
-        cursor.close()
-        conn.close()
 
 
 def get_messages(conversation_id, limit=50):
