@@ -1,0 +1,205 @@
+/* ===== TEMA VERDE PARA CLIENTE ===== */
+
+/* Substituir todas as cores azuis por verde */
+
+/* Gradientes principais */
+.hero-section,
+.service-card-icon,
+.barber-card-avatar,
+.calendar-day.selected,
+.time-slot.selected,
+.btn-booking-next,
+.empty-action,
+.appointment-date-icon {
+  background: linear-gradient(135deg, #059669, #047857) !important;
+}
+
+/* Bordas e acentos */
+.progress-line::before,
+.service-card:hover,
+.service-card.selected,
+.barber-card:hover,
+.barber-card.selected,
+.calendar-day.today,
+.calendar-day:hover:not(.disabled):not(.selected),
+.time-slot:hover:not(.disabled):not(.selected),
+.booking-summary,
+.summary-total,
+.appointment-card:hover::before {
+  border-color: #059669 !important;
+}
+
+/* Backgrounds com opacidade */
+.service-card.selected,
+.barber-card.selected,
+.booking-summary,
+.calendar-day:hover:not(.disabled):not(.selected),
+.time-slot:hover:not(.disabled):not(.selected),
+.stat-icon.blue {
+  background: linear-gradient(135deg, rgba(5, 150, 105, 0.05), rgba(4, 120, 87, 0.05)) !important;
+}
+
+/* Cores de texto */
+.hero-cta,
+.service-card-price,
+.progress-step.active .progress-step-label,
+.summary-title i,
+.summary-total .summary-value,
+.btn-booking-back:hover,
+.stat-icon.blue,
+.appointment-status.pendente {
+  color: #059669 !important;
+}
+
+/* Hover states */
+.calendar-nav-btn:hover,
+.btn-booking-back:hover {
+  background: #059669 !important;
+  color: white !important;
+  border-color: #059669 !important;
+}
+
+/* Status badges */
+.appointment-status.pendente {
+  background: rgba(5, 150, 105, 0.12) !important;
+  border: 1px solid rgba(5, 150, 105, 0.25) !important;
+}
+
+.appointment-status.agendado::before,
+.appointment-status.pendente::before {
+  background: #059669 !important;
+}
+
+/* Botões primários */
+.btn--primary,
+.primary-action,
+.hero-cta {
+  background: linear-gradient(135deg, #059669, #047857) !important;
+  color: white !important;
+}
+
+.btn--primary:hover,
+.primary-action:hover,
+.hero-cta:hover {
+  background: linear-gradient(135deg, #047857, #065f46) !important;
+  box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4) !important;
+}
+
+/* Progress steps */
+.progress-step.active .progress-step-circle {
+  background: linear-gradient(135deg, #059669, #047857) !important;
+}
+
+/* Icons gradientes */
+.icon-gradient-blue {
+  background: linear-gradient(135deg, rgba(5, 150, 105, 0.12), rgba(4, 120, 87, 0.08)) !important;
+  color: #059669 !important;
+}
+
+/* Shadows */
+.btn-booking-next {
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3) !important;
+}
+
+.btn-booking-next:hover {
+  box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4) !important;
+}
+
+/* Links e botões secundários */
+.section-action,
+.login-link,
+a[href]:not(.menu-item) {
+  color: #059669 !important;
+}
+
+.section-action:hover,
+.login-link:hover {
+  color: #047857 !important;
+}
+
+/* Cards interativos */
+.stat-card:hover,
+.appointment-card:hover {
+  border-color: rgba(5, 150, 105, 0.3) !important;
+}
+
+/* Skeleton loading */
+.skeleton {
+  background: linear-gradient(90deg, 
+    var(--color-background) 0%, 
+    rgba(5, 150, 105, 0.05) 50%, 
+    var(--color-background) 100%) !important;
+}
+
+/* Tabs */
+.tab-btn.active {
+  border-bottom-color: #059669 !important;
+  color: #059669 !important;
+}
+
+/* Form focus states */
+.form-control:focus {
+  border-color: #059669 !important;
+  box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.1) !important;
+}
+
+/* Checkboxes e radios */
+input[type="checkbox"]:checked,
+input[type="radio"]:checked {
+  background-color: #059669 !important;
+  border-color: #059669 !important;
+}
+
+/* Scrollbar (webkit) */
+::-webkit-scrollbar-thumb {
+  background: #059669 !important;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #047857 !important;
+}
+
+/* Selection */
+::selection {
+  background: rgba(5, 150, 105, 0.3) !important;
+}
+
+/* Badges e tags */
+.badge-primary,
+.tag-primary {
+  background: #059669 !important;
+  color: white !important;
+}
+
+/* Alerts e notificações */
+.alert-info,
+.notification-info {
+  border-left-color: #059669 !important;
+}
+
+/* Progress bars */
+.progress-bar {
+  background: linear-gradient(90deg, #059669, #047857) !important;
+}
+
+/* Tooltips */
+.tooltip {
+  background: #059669 !important;
+}
+
+/* Dropdowns */
+.dropdown-item:hover,
+.dropdown-item:focus {
+  background: rgba(5, 150, 105, 0.1) !important;
+  color: #059669 !important;
+}
+
+/* Modals */
+.modal-header {
+  border-bottom-color: rgba(5, 150, 105, 0.2) !important;
+}
+
+/* Dividers */
+.divider-primary {
+  border-color: #059669 !important;
+}
