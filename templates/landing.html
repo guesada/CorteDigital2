@@ -22,13 +22,12 @@
     
     <style>
         :root {
-            --primary: #10b981;
-            --primary-dark: #059669;
-            --secondary: #14b8a6;
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #ec4899;
             --dark: #0f172a;
             --light: #f8fafc;
             --gray: #64748b;
-            --black: #0a0a0a;
         }
         
         * {
@@ -117,7 +116,7 @@
         /* Hero Section */
         .hero {
             padding: 120px 0 80px;
-            background: #0a0a0a;
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
             position: relative;
             overflow: hidden;
         }
@@ -129,7 +128,7 @@
             right: 0;
             width: 50%;
             height: 100%;
-            background: radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
+            background: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.05) 0%, transparent 70%);
         }
         
         .hero-content {
@@ -142,8 +141,7 @@
             align-items: center;
             gap: 0.5rem;
             padding: 0.5rem 1rem;
-            background: rgba(16, 185, 129, 0.15);
-            border: 1px solid rgba(16, 185, 129, 0.3);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(236, 72, 153, 0.1));
             border-radius: 50px;
             font-size: 0.875rem;
             font-weight: 600;
@@ -155,7 +153,7 @@
             font-size: 4rem;
             font-weight: 900;
             line-height: 1.1;
-            color: #ffffff;
+            color: var(--dark);
             margin-bottom: 1.5rem;
         }
         
@@ -168,7 +166,7 @@
         
         .hero p.lead {
             font-size: 1.25rem;
-            color: rgba(255, 255, 255, 0.7);
+            color: var(--gray);
             margin-bottom: 2.5rem;
             line-height: 1.8;
         }
@@ -467,11 +465,14 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#how-it-works">Como Funciona</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#pricing">Preços</a>
+                    </li>
                     <li class="nav-item ms-3">
-                        <a href="/cliente" class="btn btn-outline-primary">Entrar</a>
+                        <a href="/" class="btn btn-outline-primary">Entrar</a>
                     </li>
                     <li class="nav-item ms-2">
-                        <a href="/barbeiro" class="btn btn-primary">Sou Profissional</a>
+                        <a href="/" class="btn btn-primary">Começar Grátis</a>
                     </li>
                 </ul>
             </div>
@@ -495,11 +496,11 @@
                             Gerencie agendamentos, clientes e pagamentos em uma única plataforma inteligente. Aumente sua produtividade em até 300%.
                         </p>
                         <div class="hero-buttons">
-                            <a href="/cliente" class="btn btn-primary btn-lg">
+                            <a href="/" class="btn btn-primary btn-lg">
                                 <i class="bi bi-rocket-takeoff"></i> Começar Agora
                             </a>
                             <a href="#how-it-works" class="btn btn-outline-primary btn-lg">
-                                <i class="bi bi-play-circle"></i> Ver Como Funciona
+                                <i class="bi bi-play-circle"></i> Ver Demo
                             </a>
                         </div>
                     </div>
@@ -652,7 +653,7 @@
             <div class="cta-content" data-aos="zoom-in">
                 <h2>Pronto Para Transformar Seu Negócio?</h2>
                 <p>Junte-se a milhares de profissionais que já usam o Groomly</p>
-                <a href="/barbeiro" class="btn btn-light btn-lg">
+                <a href="/" class="btn btn-light btn-lg">
                     <i class="bi bi-rocket-takeoff"></i> Começar Gratuitamente
                 </a>
             </div>
@@ -671,7 +672,7 @@
                     <h5>Produto</h5>
                     <ul class="footer-links">
                         <li><a href="#features">Recursos</a></li>
-                        <li><a href="#how-it-works">Como Funciona</a></li>
+                        <li><a href="#pricing">Preços</a></li>
                         <li><a href="#">Integrações</a></li>
                     </ul>
                 </div>
@@ -706,118 +707,11 @@
         </div>
     </footer>
 
-    <!-- Login Modal -->
-    <div class="modal fade" id="loginModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow-lg">
-                <div class="modal-header border-0 pb-0">
-                    <h5 class="modal-title fw-bold">
-                        <i class="bi bi-box-arrow-in-right text-primary"></i> Entrar no Groomly
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body p-4">
-                    <form id="loginForm">
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold">Email</label>
-                            <div class="input-group">
-                                <span class="input-group-text bg-light border-end-0">
-                                    <i class="bi bi-envelope text-muted"></i>
-                                </span>
-                                <input type="email" class="form-control border-start-0 ps-0" name="email" placeholder="seu@email.com" required>
-                            </div>
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label fw-semibold">Senha</label>
-                            <div class="input-group">
-                                <span class="input-group-text bg-light border-end-0">
-                                    <i class="bi bi-lock text-muted"></i>
-                                </span>
-                                <input type="password" class="form-control border-start-0 ps-0" name="password" placeholder="••••••••" required>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100 py-3 mb-3">
-                            <i class="bi bi-check-circle"></i> Entrar
-                        </button>
-                        <div class="text-center">
-                            <small class="text-muted">
-                                Não tem conta? 
-                                <a href="#" class="text-primary fw-semibold text-decoration-none" data-bs-toggle="modal" data-bs-target="#registerModal" data-bs-dismiss="modal">
-                                    Cadastre-se gratuitamente
-                                </a>
-                            </small>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Register Modal -->
-    <div class="modal fade" id="registerModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow-lg">
-                <div class="modal-header border-0 pb-0">
-                    <h5 class="modal-title fw-bold">
-                        <i class="bi bi-person-plus text-primary"></i> Criar Conta no Groomly
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body p-4">
-                    <form id="registerForm">
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold">Nome Completo</label>
-                            <input type="text" class="form-control" name="name" placeholder="Seu nome completo" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold">Email</label>
-                            <input type="email" class="form-control" name="email" placeholder="seu@email.com" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold">Telefone</label>
-                            <input type="tel" class="form-control" name="phone" placeholder="(11) 98765-4321">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold">Senha</label>
-                            <input type="password" class="form-control" name="password" placeholder="Mínimo 6 caracteres" required minlength="6">
-                            <small class="text-muted">Use pelo menos 6 caracteres</small>
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label fw-semibold">Tipo de Conta</label>
-                            <select class="form-select" name="userType" required>
-                                <option value="">Selecione o tipo de conta...</option>
-                                <option value="cliente">👤 Cliente - Quero agendar serviços</option>
-                                <option value="profissional">💼 Profissional - Quero oferecer serviços</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100 py-3 mb-3">
-                            <i class="bi bi-rocket-takeoff"></i> Criar Conta Gratuitamente
-                        </button>
-                        <div class="text-center">
-                            <small class="text-muted">
-                                Já tem conta? 
-                                <a href="#" class="text-primary fw-semibold text-decoration-none" data-bs-toggle="modal" data-bs-target="#loginModal" data-bs-dismiss="modal">
-                                    Faça login
-                                </a>
-                            </small>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Toast Container -->
-    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;"></div>
-
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     
     <!-- AOS Animation -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    
-    <!-- Axios -->
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     
     <script>
         // Initialize AOS
@@ -835,116 +729,6 @@
             } else {
                 navbar.classList.remove('scrolled');
             }
-        });
-
-        // Axios config
-        axios.defaults.withCredentials = true;
-
-        // Toast notification
-        function showToast(message, type = 'success') {
-            const toastContainer = document.querySelector('.toast-container');
-            const toastId = 'toast-' + Date.now();
-            
-            const bgColor = type === 'success' ? 'bg-success' : type === 'danger' ? 'bg-danger' : 'bg-warning';
-            
-            const toastHTML = `
-                <div id="${toastId}" class="toast align-items-center text-white ${bgColor} border-0" role="alert">
-                    <div class="d-flex">
-                        <div class="toast-body">
-                            <i class="bi bi-${type === 'success' ? 'check-circle' : type === 'danger' ? 'x-circle' : 'exclamation-circle'}"></i>
-                            ${message}
-                        </div>
-                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
-                    </div>
-                </div>
-            `;
-            
-            toastContainer.insertAdjacentHTML('beforeend', toastHTML);
-            const toastElement = document.getElementById(toastId);
-            const toast = new bootstrap.Toast(toastElement, { delay: 4000 });
-            toast.show();
-            
-            toastElement.addEventListener('hidden.bs.toast', () => {
-                toastElement.remove();
-            });
-        }
-
-        // Loading overlay
-        function showLoading() {
-            const overlay = document.createElement('div');
-            overlay.id = 'loadingOverlay';
-            overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:9999;';
-            overlay.innerHTML = '<div class="spinner-border text-light" style="width:3rem;height:3rem;"></div>';
-            document.body.appendChild(overlay);
-        }
-
-        function hideLoading() {
-            const overlay = document.getElementById('loadingOverlay');
-            if (overlay) overlay.remove();
-        }
-
-        // Login Form
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const formData = new FormData(e.target);
-            const data = Object.fromEntries(formData);
-            
-            try {
-                showLoading();
-                const response = await axios.post('/api/users/login', data);
-                hideLoading();
-                
-                if (response.data.success) {
-                    showToast('Login realizado com sucesso!', 'success');
-                    setTimeout(() => {
-                        const userType = response.data.user.userType;
-                        window.location.href = userType === 'profissional' ? '/barbeiro' : '/cliente';
-                    }, 1000);
-                }
-            } catch (error) {
-                hideLoading();
-                showToast(error.response?.data?.message || 'Erro ao fazer login. Verifique suas credenciais.', 'danger');
-            }
-        });
-
-        // Register Form
-        document.getElementById('registerForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const formData = new FormData(e.target);
-            const data = Object.fromEntries(formData);
-            
-            if (!data.userType) {
-                showToast('Por favor, selecione o tipo de conta', 'warning');
-                return;
-            }
-            
-            try {
-                showLoading();
-                const response = await axios.post('/api/users/register', data);
-                hideLoading();
-                
-                if (response.data.success) {
-                    showToast('Cadastro realizado com sucesso! Faça login para continuar.', 'success');
-                    bootstrap.Modal.getInstance(document.getElementById('registerModal')).hide();
-                    setTimeout(() => {
-                        new bootstrap.Modal(document.getElementById('loginModal')).show();
-                    }, 500);
-                    e.target.reset();
-                }
-            } catch (error) {
-                hideLoading();
-                showToast(error.response?.data?.message || 'Erro ao cadastrar. Tente novamente.', 'danger');
-            }
-        });
-
-        // Open login modal from navbar
-        document.querySelectorAll('[href="/cliente"]').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                if (!btn.classList.contains('btn-primary')) {
-                    e.preventDefault();
-                    new bootstrap.Modal(document.getElementById('loginModal')).show();
-                }
-            });
         });
     </script>
 </body>

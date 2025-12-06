@@ -1,265 +1,205 @@
-# 💈 Corte Digital v2.0.0
+# 💇 Groomly - Sistema Profissional de Agendamento
 
-> Sistema profissional de agendamento para barbearias com IA integrada
+Sistema completo de agendamento para estúdios de beleza, salões de cabeleireiro, clínicas de estética e espaços de bem-estar.
 
-[![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org/)
-[![Flask](https://img.shields.io/badge/Flask-2.3+-green.svg)](https://flask.palletsprojects.com/)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+**Groomly** é a solução moderna e profissional para gerenciar agendamentos, clientes e serviços em estabelecimentos de beleza.
 
-## 🚀 Features
+## 🌟 Funcionalidades
 
-### ✨ Core Features
-- ✅ **Sistema de Agendamento** - Gestão completa de agendamentos
-- ✅ **Multi-usuário** - Clientes e Barbeiros
-- ✅ **Chat em Tempo Real** - WebSocket integrado
-- ✅ **Notificações Push** - Sistema de notificações em tempo real
-- ✅ **Sistema de Avaliações** - Reviews e ratings
+### Para Clientes
+- ✅ Agendamento online de serviços
+- 📅 Visualização de horários disponíveis
+- 💬 Chat em tempo real com profissionais
+- ⭐ Sistema de avaliações e reviews
+- 🔔 Notificações de confirmação e lembretes
+- 📊 Histórico de agendamentos
+- 🤖 Recomendações inteligentes baseadas em IA
 
-### 🤖 IA & Machine Learning
-- ✅ **Recomendações Inteligentes** - Sugestões baseadas em padrões
-- ✅ **Análise de Comportamento** - Insights personalizados
-- ✅ **Previsão de Horários** - Sugestões de próximos agendamentos
-- ✅ **Recomendação de Serviços** - Baseado em histórico
+### Para Profissionais
+- 📆 Gestão completa de agenda
+- 💰 Controle de preços personalizados por serviço
+- 📈 Dashboard com analytics e métricas
+- 💬 Chat com clientes
+- ⭐ Gestão de avaliações
+- 🔔 Notificações em tempo real
+- 📸 Portfolio de trabalhos
+- ⏰ Configuração de horários de trabalho
+- 🚫 Bloqueio de horários (folgas, compromissos)
 
-### 🔒 Segurança
-- ✅ **Validação Avançada** - Email, telefone, CPF
-- ✅ **Rate Limiting** - Proteção contra spam
-- ✅ **Sanitização de Inputs** - Proteção XSS
-- ✅ **Sessões Seguras** - HTTPOnly cookies
+### Recursos Técnicos
+- 🔐 Autenticação segura com sessões
+- 🔄 WebSocket para comunicação em tempo real
+- 🤖 IA para análise de padrões e recomendações
+- 📱 Interface responsiva
+- 🎨 Design moderno e intuitivo
+- 🔍 Validações avançadas
+- 📊 Sistema de analytics
+- 🗄️ Banco de dados MySQL/MariaDB
 
-### 📊 Analytics
-- ✅ **Dashboard Completo** - Métricas em tempo real
-- ✅ **Relatórios** - Faturamento, agendamentos, clientes
-- ✅ **Gráficos Interativos** - Visualização de dados
+## 🚀 Tecnologias
 
-## 🏗️ Arquitetura
+- **Backend**: Python 3.11+, Flask
+- **Banco de Dados**: MySQL/MariaDB com SQLAlchemy ORM
+- **Real-time**: Flask-SocketIO
+- **Frontend**: HTML5, CSS3, JavaScript (Vanilla)
+- **IA/ML**: scikit-learn, pandas, numpy
 
-```
-corte-digital/
-├── app/
-│   ├── api/v1/          # API REST versão 1
-│   ├── core/            # Módulos fundamentais
-│   ├── models/          # Modelos de dados
-│   ├── services/        # Lógica de negócio
-│   ├── utils/           # Utilitários
-│   ├── static/          # Arquivos estáticos
-│   └── templates/       # Templates HTML
-├── tests/               # Testes automatizados
-├── logs/                # Logs da aplicação
-├── uploads/             # Arquivos enviados
-└── migrations/          # Migrações de banco
-```
+## 📋 Pré-requisitos
 
-## 🚀 Quick Start
+- Python 3.11 ou superior
+- MySQL 8.0 ou MariaDB 10.5+
+- pip (gerenciador de pacotes Python)
 
-### Pré-requisitos
+## 🔧 Instalação
 
-- Python 3.9+
-- pip
-- virtualenv (recomendado)
-
-### Instalação
-
-1. **Clone o repositório**
+1. Clone o repositório:
 ```bash
-git clone https://github.com/seu-usuario/corte-digital.git
-cd corte-digital
+git clone https://github.com/guesada/CorteDigital.git
+cd CorteDigital
 ```
 
-2. **Crie ambiente virtual**
+2. Crie um ambiente virtual:
 ```bash
 python -m venv venv
 source venv/bin/activate  # Linux/Mac
 venv\Scripts\activate     # Windows
 ```
 
-3. **Instale dependências**
+3. Instale as dependências:
 ```bash
 pip install -r requirements.txt
 ```
 
-4. **Configure variáveis de ambiente**
+4. Configure o banco de dados:
+   - Crie um banco de dados MySQL
+   - Copie `.env.example` para `.env`
+   - Configure as variáveis de ambiente
+
+5. Execute a aplicação:
 ```bash
-cp .env.example .env
-# Edite .env com suas configurações
+python app.py
 ```
 
-5. **Inicialize o banco de dados**
-```bash
-flask init-db
+6. Acesse no navegador:
+```
+http://localhost:5001
 ```
 
-6. **Execute a aplicação**
-```bash
-python run.py
-```
+## ⚙️ Configuração
 
-Acesse: http://localhost:5001
-
-## 📚 API Documentation
-
-### Autenticação
-
-#### POST /api/v1/auth/login
-Login de usuário
-
-```json
-{
-  "email": "user@example.com",
-  "password": "senha123"
-}
-```
-
-#### POST /api/v1/auth/register
-Registro de novo usuário
-
-```json
-{
-  "name": "João Silva",
-  "email": "joao@example.com",
-  "phone": "(11) 98765-4321",
-  "password": "Senha@123"
-}
-```
-
-### Agendamentos
-
-#### GET /api/v1/appointments
-Lista agendamentos do usuário
-
-#### POST /api/v1/appointments
-Cria novo agendamento
-
-```json
-{
-  "barberId": 1,
-  "serviceId": 2,
-  "date": "2025-12-15",
-  "time": "14:00"
-}
-```
-
-### IA & Recomendações
-
-#### GET /api/v1/ai/patterns
-Análise de padrões do usuário
-
-#### GET /api/v1/ai/suggest-appointment
-Sugestões de próximos agendamentos
-
-#### GET /api/v1/ai/insights
-Insights personalizados
-
-## 🧪 Testes
-
-```bash
-# Executar todos os testes
-pytest
-
-# Com coverage
-pytest --cov=app tests/
-
-# Testes específicos
-pytest tests/test_api/
-```
-
-## 🐳 Docker
-
-```bash
-# Build
-docker build -t corte-digital .
-
-# Run
-docker-compose up
-```
-
-## 📊 Monitoramento
-
-### Logs
-```bash
-tail -f logs/app.log
-```
-
-### Health Check
-```
-GET /health
-```
-
-## 🔧 Configuração
-
-### Ambientes
-
-- **Development**: Desenvolvimento local
-- **Staging**: Testes pré-produção
-- **Production**: Produção
-
-Configure via variável `FLASK_ENV`:
-
-```bash
-export FLASK_ENV=production
-```
-
-### Variáveis de Ambiente
+Edite o arquivo `.env` com suas configurações:
 
 ```env
-# App
-SECRET_KEY=sua_chave_secreta
+# Banco de Dados
+DATABASE_URL=usuario@localhost:3306@senha@nome_banco
+
+# Aplicação
+SECRET_KEY=sua_chave_secreta_aqui
+HOST=0.0.0.0
+PORT=5001
 FLASK_ENV=development
 
-# Database
-DATABASE_PATH=corte_digital.db
-
-# Email
-MAIL_SERVER=smtp.gmail.com
-MAIL_PORT=587
-MAIL_USERNAME=seu_email@gmail.com
-MAIL_PASSWORD=sua_senha
-
-# Redis (opcional)
-REDIS_URL=redis://localhost:6379/0
+# Features
+FEATURE_AI_RECOMMENDATIONS=true
+FEATURE_CHAT=true
+FEATURE_NOTIFICATIONS=true
+FEATURE_REVIEWS=true
+FEATURE_ANALYTICS=true
 ```
+
+## 📁 Estrutura do Projeto
+
+```
+CorteDigital/
+├── app.py                 # Aplicação principal
+├── config.py              # Configurações
+├── constants.py           # Constantes
+├── db.py                  # Modelos do banco de dados
+├── database_config.py     # Configuração de conexão
+├── requirements.txt       # Dependências
+├── .env                   # Variáveis de ambiente
+├── routes/                # Rotas da aplicação
+│   ├── auth.py           # Autenticação
+│   ├── appointments.py   # Agendamentos
+│   ├── chat.py           # Chat
+│   ├── reviews.py        # Avaliações
+│   ├── analytics.py      # Analytics
+│   └── ...
+├── services/              # Lógica de negócio
+│   ├── auth_service.py
+│   ├── appointment_service.py
+│   ├── chat_service.py
+│   └── ...
+├── templates/             # Templates HTML
+└── static/                # Arquivos estáticos (CSS, JS, imagens)
+```
+
+## 🗄️ Modelos de Dados
+
+### Principais Entidades
+
+- **Cliente**: Usuários que agendam serviços
+- **Professional**: Profissionais de beleza (cabeleireiros, manicures, etc)
+- **Service**: Serviços oferecidos
+- **Appointment**: Agendamentos
+- **Review**: Avaliações de serviços
+- **ChatConversation**: Conversas entre clientes e profissionais
+- **Notification**: Notificações do sistema
+- **WorkingHours**: Horários de trabalho dos profissionais
+- **BlockedTime**: Horários bloqueados
+
+## 🎯 Categorias Suportadas
+
+### Profissionais
+- Cabeleireiro
+- Manicure
+- Pedicure
+- Esteticista
+- Maquiador
+- Barbeiro
+- Depilador
+- Massagista
+- Designer de Sobrancelhas
+
+### Serviços
+- Cabelo (corte, coloração, tratamentos)
+- Unhas (manicure, pedicure, nail art)
+- Estética Facial
+- Estética Corporal
+- Maquiagem
+- Barba
+- Depilação
+- Massagem
+- Sobrancelhas
 
 ## 🤝 Contribuindo
 
+Contribuições são bem-vindas! Por favor:
+
 1. Fork o projeto
-2. Crie uma branch (`git checkout -b feature/AmazingFeature`)
+2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
 3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
 4. Push para a branch (`git push origin feature/AmazingFeature`)
 5. Abra um Pull Request
 
-## 📝 Changelog
+## 📝 Licença
 
-### v2.0.0 (2025-12-03)
-- ✨ Arquitetura completamente refatorada
-- ✨ API REST v1 com versionamento
-- ✨ Sistema de IA para recomendações
-- ✨ Validações avançadas
-- ✨ Cache integrado
-- ✨ Logging estruturado
-- ✨ Testes automatizados
-- ✨ Docker support
+Este projeto está sob a licença MIT.
 
-### v1.0.0 (2025-11-01)
-- 🎉 Versão inicial
+## 🎨 Design
 
-## 📄 Licença
+Interface moderna e responsiva desenvolvida com Bootstrap 5, focada em usabilidade e experiência do usuário.
 
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+## 👥 Autores
 
-## 👥 Equipe
+- **Guesada** - [guesada](https://github.com/guesada)
 
-- **Desenvolvimento** - Corte Digital Team
-- **Design** - UI/UX Team
-- **IA** - ML Team
+## 📞 Suporte
 
-## 🙏 Agradecimentos
-
-- Flask Community
-- Contributors
-- Beta Testers
+Para suporte, envie um email para suporte@groomly.com ou abra uma issue no GitHub.
 
 ---
 
-**Desenvolvido com ❤️ para revolucionar o agendamento em barbearias**
+⭐ Se este projeto foi útil para você, considere dar uma estrela!
 
-[Website](https://cortedigital.com) • [Documentação](https://docs.cortedigital.com) • [Suporte](mailto:suporte@cortedigital.com)
+**Groomly** - Transformando a gestão de beleza em algo simples e eficiente.
